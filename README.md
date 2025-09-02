@@ -4,8 +4,6 @@
 ![PHP](https://img.shields.io/badge/PHP-8.0-blue?logo=php)
 ![MySQL](https://img.shields.io/badge/Database-MySQL-lightblue?logo=mysql)
 ![GitHub Repo Size](https://img.shields.io/github/repo-size/<username>/<repo>?color=orange)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Last Commit](https://img.shields.io/github/last-commit/<username>/<repo>?color=blue)
 ![Issues](https://img.shields.io/github/issues/<username>/<repo>?color=red)
 ![PRs](https://img.shields.io/github/issues-pr/<username>/<repo>?color=yellow)
 
