@@ -3,9 +3,7 @@
 ![Laravel](https://img.shields.io/badge/Framework-Laravel-red?logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.0-blue?logo=php)
 ![MySQL](https://img.shields.io/badge/Database-MySQL-lightblue?logo=mysql)
-![GitHub Repo Size](https://img.shields.io/github/repo-size/<username>/<repo>?color=orange)
-![Issues](https://img.shields.io/github/issues/<username>/<repo>?color=red)
-![PRs](https://img.shields.io/github/issues-pr/<username>/<repo>?color=yellow)
+
 
 Sistem **Pelayanan TIK** ini dibuat untuk mendukung proses pelayanan teknologi informasi di **Dinas Komunikasi dan Informatika (Diskominsa) Aceh**. Sistem ini dirancang agar admin, teknisi, dan tamu (guest) dapat berinteraksi sesuai peran masing-masing.
 
