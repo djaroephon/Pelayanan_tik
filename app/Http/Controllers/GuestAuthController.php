@@ -29,8 +29,8 @@ class GuestAuthController extends Controller
 
 public function downloadTemplate()
     {
-        $filePath = storage_path('app/public/template/contoh.pdf');
-        $fileName = 'contoh.pdf';
+        $filePath = storage_path('app/public/template/Template_Surat_Pernyataan_Pengelola_TIK_SKPA.docx');
+        $fileName = 'Template_Surat_Pernyataan_Pengelola_TIK_SKPA.docx';
 
         if (file_exists($filePath)) {
             return response()->download($filePath, $fileName, [
