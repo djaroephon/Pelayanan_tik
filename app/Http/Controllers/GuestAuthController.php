@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Laporan;
 
 class GuestAuthController extends Controller
 {
@@ -19,15 +18,15 @@ class GuestAuthController extends Controller
             return redirect()->route('guest.login');
         }
         $stats = [
-    'completed'   => $guest->laporan()->where('status', 'complete')->count(),
-    'progress'    => $guest->laporan()->where('status', 'on progress')->count(),
-    'total'       => $guest->laporan()->count(),
-];
+            'completed' => $guest->laporan()->where('status', 'complete')->count(),
+            'progress' => $guest->laporan()->where('status', 'on progress')->count(),
+            'total' => $guest->laporan()->count(),
+        ];
 
-         return view('pages.guest.homeguest', compact('guest', 'stats'));
+        return view('pages.guest.homeguest', compact('guest', 'stats'));
     }
 
-public function downloadTemplate()
+    public function downloadTemplate()
     {
         $filePath = storage_path('app/public/template/Template_Surat_Pernyataan_Pengelola_TIK_SKPA.docx');
         $fileName = 'Template_Surat_Pernyataan_Pengelola_TIK_SKPA.docx';
@@ -41,19 +40,17 @@ public function downloadTemplate()
         }
     }
 
- public function laporanSaya()
- {
-    $guest = Auth::guard('guest')->user();
-    if (! $guest) {
-        return redirect()->route('guest.login');
+    public function laporanSaya()
+    {
+        $guest = Auth::guard('guest')->user();
+        if (! $guest) {
+            return redirect()->route('guest.login');
+        }
+
+        $laporan = $guest->laporan()->get();
+
+        return view('pages.guest.laporanDetail', compact('guest', 'laporan'));
     }
-
-    $laporan = $guest->laporan()->get();
-
-    return view('pages.guest.laporanDetail', compact('guest', 'laporan'));
- }
-
-
 
     public function showLoginForm()
     {
@@ -79,7 +76,7 @@ public function downloadTemplate()
 
             if ($guest->status === 'rejected') {
                 return back()->withErrors([
-                    'nik' => 'Akun Anda ditolak oleh admin. Silakan hubungi administrator.',
+                    'nik' => 'Akun Anda ditolak oleh admin. Silakan perbaiki data dan daftar kembali.',
                 ])->onlyInput('nik');
             }
 
@@ -105,6 +102,7 @@ public function downloadTemplate()
             'nama_pelapor' => 'required|string|max:100',
             'nik' => 'required|string|unique:guest,nik|max:20',
             'nip' => 'required|string|unique:guest,nip|max:20',
+            'no_hp' => 'required|string|unique:guest,no_hp|max:20',
             'instansi' => 'required|string|max:100',
             'surat_pernyataan_pengelola' => 'required|file|mimes:pdf|max:2048',
             'ktp' => 'required|file|mimes:jpg,jpeg,png|max:2048',
@@ -128,6 +126,7 @@ public function downloadTemplate()
                 'nama_pelapor' => $request->nama_pelapor,
                 'nik' => $request->nik,
                 'nip' => $request->nip,
+                'no_hp' => $request->no_hp,
                 'instansi' => $request->instansi,
                 'surat_pernyataan_pengelola' => $suratPath,
                 'ktp' => $ktpPath,
@@ -163,6 +162,4 @@ public function downloadTemplate()
 
         return redirect('/');
     }
-
-
 }
