@@ -472,6 +472,16 @@
                             <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
+                                <div class="mb-3">
+                <label for="no_hp" class="form-label">No.HP<span class="required">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-phone text-secondary"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0 @error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp"
+                        placeholder="Masukkan Nomor Hp Anda" required value="{{ old('no_hp') }}">
+                </div>
+            </div>
 
                     <div class="mb-4">
                         <label for="instansi" class="form-label">Instansi<span class="required">*</span></label>

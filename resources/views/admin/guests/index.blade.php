@@ -254,8 +254,8 @@
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
-                                        <th>NIK</th>
                                         <th>NIP</th>
+                                        <th>No HP</th>
                                         <th>Instansi</th>
                                         <th>Status</th>
                                         <th>Dokumen</th>
@@ -273,8 +273,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $guest->nik }}</td>
                                         <td>{{ $guest->nip }}</td>
+                                        <td>{{ $guest->no_hp }}</td>
                                         <td>{{ $guest->instansi }}</td>
                                         <td>
                                             @if($guest->status === 'pending')
@@ -376,6 +376,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
