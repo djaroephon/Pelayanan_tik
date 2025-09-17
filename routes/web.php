@@ -83,7 +83,7 @@ Route::middleware(['auth', CheckRole::class.':teknisi'])->name('teknisi.')->pref
     Route::get('/laporan', [TeknisiLaporController::class, 'index'])->name('index');
     Route::get('/laporan/{laporan}/edit', [TeknisiLaporController::class, 'edit'])->name('edit');
     Route::put('/laporan/{laporan}', [TeknisiLaporController::class, 'update'])->name('update');
-        Route::get('/layanan', [TeknisiLaporController::class, 'Layanan'])->name('layanan');
+    Route::get('/layanan', [TeknisiLaporController::class, 'Layanan'])->name('layanan');
 
 });
 
