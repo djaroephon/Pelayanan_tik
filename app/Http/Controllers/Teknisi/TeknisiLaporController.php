@@ -72,7 +72,6 @@ class TeknisiLaporController extends Controller
         return redirect()->route('teknisi.index')->with('success', 'Penyelesaian berhasil disimpan');
     }
 
-
     public function Layanan()
     {
         $teknisi = Auth::user()->teknisi;
