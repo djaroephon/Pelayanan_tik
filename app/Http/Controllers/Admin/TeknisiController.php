@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Teknisi;
 use Illuminate\Http\Request;
-use App\Models\Laporan;
 use Illuminate\Support\Facades\Auth;
 
 class TeknisiController extends Controller
