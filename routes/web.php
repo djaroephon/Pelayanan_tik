@@ -11,9 +11,11 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Export\ExportController;
 use App\Http\Controllers\GuestAuthController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Penjab\PenjabUserController;
 use App\Http\Controllers\Teknisi\TeknisiLaporController;
 use App\Http\Middleware\CheckRole;
 use App\Models\Guest;
+use App\Models\PenjabLayanan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -85,6 +87,14 @@ Route::middleware(['auth', CheckRole::class.':teknisi'])->name('teknisi.')->pref
     Route::put('/laporan/{laporan}', [TeknisiLaporController::class, 'update'])->name('update');
     Route::get('/layanan', [TeknisiLaporController::class, 'Layanan'])->name('layanan');
 
+});
+
+Route::middleware(['auth', CheckRole::class.':penjab'])->group(function () {
+ Route::get('/penjab/dashboard', [PenjabController::class, 'index'])->name('penjab.dashboard');
+    Route::get('/penjab/layanan', [PenjabController::class, 'layanan'])->name('penjab.layanan');
+    Route::get('/penjab/layanan/{id}', [PenjabController::class, 'layananDetail'])->name('penjab.layanan.detail');
+    Route::get('/penjab/laporan', [PenjabController::class, 'laporan'])->name('penjab.laporan');
+    Route::get('/penjab/laporan/{id}', [PenjabController::class, 'laporanDetail'])->name('penjab.laporan.detail');
 });
 
 Route::get('/', function () {
