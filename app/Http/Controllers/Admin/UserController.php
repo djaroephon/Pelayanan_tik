@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Teknisi;
 use App\Models\User;
+use App\Models\PenjabLayanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,8 +15,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('teknisi')
-            ->whereIn('role', ['admin', 'operator', 'teknisi'])
+        $users = User::with(['teknisi', 'penjabLayanans'])
+            ->whereIn('role', ['admin', 'operator', 'teknisi', 'penjab'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -36,17 +37,19 @@ class UserController extends Controller
         if (Auth::user()->role !== 'admin') {
             abort(403, 'Unauthorized action.');
         }
-        // Define base validation rules
+
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'role' => 'required|in:admin,operator,teknisi',
+            'role' => 'required|in:admin,operator,teknisi,penjab',
         ];
 
-        // Add conditional validation for teknisi fields
         if ($request->role === 'teknisi') {
             $rules['no_hp_teknisi'] = 'required|string|max:15';
+        } elseif ($request->role === 'penjab') {
+            $rules['nama_penjab_layanan'] = 'required|array|min:1';
+            $rules['nama_penjab_layanan.*'] = 'required|string|max:100';
         }
 
         $validatedData = $request->validate($rules);
@@ -67,6 +70,19 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ]);
         }
+        // Create multiple penjab layanan records if role is penjab
+        elseif ($validatedData['role'] === 'penjab') {
+            if ($request->has('nama_penjab_layanan')) {
+                foreach ($request->nama_penjab_layanan as $namaLayanan) {
+                    if (!empty(trim($namaLayanan))) {
+                        PenjabLayanan::create([
+                            'penjab_id' => $user->id,
+                            'nama_penjab_layanan' => trim($namaLayanan),
+                        ]);
+                    }
+                }
+            }
+        }
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User berhasil ditambahkan');
@@ -80,7 +96,6 @@ class UserController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        // Define base validation rules
         $rules = [
             'name' => 'required|string|max:255',
             'email' => [
@@ -89,33 +104,36 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($user->id),
             ],
             'password' => 'nullable|min:8|confirmed',
-            'role' => ['required', Rule::in(['admin', 'operator', 'teknisi'])],
+            'role' => ['required', Rule::in(['admin', 'operator', 'teknisi', 'penjab'])],
         ];
 
-        // Add conditional validation for teknisi fields
         if ($request->role === 'teknisi') {
             $rules['no_hp_teknisi'] = 'required|string|max:15';
+        } elseif ($request->role === 'penjab') {
+            $rules['nama_penjab_layanan'] = 'required|array|min:1';
+            $rules['nama_penjab_layanan.*'] = 'required|string|max:100';
         }
 
         $validatedData = $request->validate($rules);
 
-        // Prepare user data
+        // Update user data
         $userData = [
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'role' => $validatedData['role'],
         ];
 
-        // Update password if provided
         if ($validatedData['password'] ?? false) {
             $userData['password'] = Hash::make($validatedData['password']);
         }
 
-        // Update user
         $user->update($userData);
 
-        // Handle teknisi data
+        // Sync teknisi data
         $this->syncTeknisiData($user, $validatedData['role'], $request->no_hp_teknisi ?? null);
+
+        // Sync penjab data (multiple layanan)
+        $this->syncPenjabData($user, $validatedData['role'], $request->nama_penjab_layanan ?? []);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User berhasil diperbarui');
@@ -156,5 +174,48 @@ class UserController extends Controller
         } elseif ($user->teknisi) {
             $user->teknisi->delete();
         }
+    }
+
+    /**
+     * Sync multiple penjab data based on user role
+     */
+    protected function syncPenjabData(User $user, string $role, array $namaLayanans): void
+    {
+        if ($role === 'penjab') {
+            $existingLayananIds = [];
+
+            // Update atau create layanan
+            foreach ($namaLayanans as $namaLayanan) {
+                if (!empty(trim($namaLayanan))) {
+                    $layanan = PenjabLayanan::updateOrCreate(
+                        [
+                            'penjab_id' => $user->id,
+                            'nama_penjab_layanan' => trim($namaLayanan)
+                        ]
+                    );
+                    $existingLayananIds[] = $layanan->id;
+                }
+            }
+
+            // Hapus layanan yang tidak ada dalam list baru
+            PenjabLayanan::where('penjab_id', $user->id)
+                        ->whereNotIn('id', $existingLayananIds)
+                        ->delete();
+
+        } elseif ($user->penjabLayanans()->exists()) {
+            // Hapus semua layanan jika role bukan penjab
+            $user->penjabLayanans()->delete();
+        }
+    }
+
+    /**
+     * Get layanan for user (for AJAX in edit modal)
+     */
+    public function getLayanan($id)
+    {
+        $user = User::findOrFail($id);
+        $layanans = $user->penjabLayanans()->get();
+
+        return response()->json($layanans);
     }
 }
