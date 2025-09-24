@@ -201,54 +201,14 @@
 
             <div class="service-card animate-item">
                 <div class="service-icon">
-                    <i class="bi bi-hdd-network"></i>
-                </div>
-                <h4>Layanan Colocation</h4>
-                <p>Permohonan Colocation/Penitipan Server</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-         <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-shield-check"></i>
-                </div>
-                <h4>Layanan VPN</h4>
-                <p>Permohonan VPN</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-            <div class="service-card animate-item">
-                <div class="service-icon">
                     <i class="bi bi-hdd-rack"></i>
                 </div>
-                <h4>Layanan VPS</h4>
-                <p>Permohonan VPS</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-            <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-envelope-at"></i>
-                </div>
-                <h4>Layanan Email</h4>
-                <p>Permohonan Email</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-            <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-globe2"></i>
-                </div>
-                <h4>Layanan Jaringan </h4>
-                <p>Permohonan Jaringan Internet/Metro</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-
+                <h4>Layanan Relocation</h4>
+                <p>Permohonan Relocation</p>
+<button type="button" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#relokasiModal">
+        Ajukan Relokasi
+    </button>
         </div>
-
-
-
-
         <!-- Stats Section -->
         <h2 class="mb-4 mt-5 animate-item">Statistik Laporan Saya</h2>
         <div class="row">
@@ -300,6 +260,70 @@
             </div>
         </footer>
     </div>
+
+{{-- modal relokasi
+    <div class="modal fade" id="relokasiModal" tabindex="-1" aria-labelledby="relokasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="relokasiModalLabel">Formulir Relokasi Layanan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('relokasi.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Lokasi Saat Ini</h6>
+                            <div class="mb-3">
+                                <label for="instansi" class="form-label">Instansi</label>
+                                <input type="text" class="form-control" id="instansi" name="instansi" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="alamat" class="form-label">Alamat</label>
+                                <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="koordinat" class="form-label">Koordinat (Opsional)</label>
+                                <input type="text" class="form-control" id="koordinat" name="koordinat" placeholder="Contoh: -6.2088, 106.8456">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Lokasi Tujuan</h6>
+                            <div class="mb-3">
+                                <label for="instansi_baru" class="form-label">Instansi Baru</label>
+                                <input type="text" class="form-control" id="instansi_baru" name="instansi_baru" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="destination" class="form-label">Alamat Baru</label>
+                                <textarea class="form-control" id="destination" name="destination" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="koordinat_destination" class="form-label">Koordinat Baru (Opsional)</label>
+                                <input type="text" class="form-control" id="koordinat_destination" name="koordinat_destination" placeholder="Contoh: -6.2088, 106.8456">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="alasan" class="form-label">Alasan Relokasi</label>
+                        <textarea class="form-control" id="alasan" name="alasan" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload Surat Permohonan (PDF)</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".pdf" required>
+                        <div class="form-text">Maksimal ukuran file: 2MB</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Ajukan Relokasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
