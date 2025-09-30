@@ -11,10 +11,17 @@ use App\Models\Teknisi;
 
 class PenjabController extends Controller
 {
-      public function index()
+// Helper method untuk mendapatkan penjabLayanans
+    private function getPenjabLayanans()
     {
-        // Ambil SEMUA layanan penjab (multiple)
-        $penjabLayanans = PenjabLayanan::where('penjab_id', Auth::id())->get();
+        return PenjabLayanan::where('penjab_id', Auth::id())
+            ->withCount('laporans')
+            ->get();
+    }
+
+    public function index()
+    {
+        $penjabLayanans = $this->getPenjabLayanans();
 
         if ($penjabLayanans->isEmpty()) {
             return view('penjab.dashboard', [
@@ -27,26 +34,28 @@ class PenjabController extends Controller
             ]);
         }
 
-        // Ambil IDs semua layanan
         $layananIds = $penjabLayanans->pluck('id')->toArray();
 
-        // Ambil laporan dari SEMUA layanan
         $laporans = Laporan::whereHas('penyelesaian', function($query) use ($layananIds) {
             $query->whereIn('penjab_layanan_id', $layananIds);
-        })->with(['kategori', 'teknisis'])->latest()->take(10)->get();
+        })->with(['kategori', 'teknisis', 'penyelesaian.penjabLayanan'])->latest()->take(10)->get();
 
-        // Ambil teknisi dari SEMUA layanan
         $teknisis = Teknisi::whereHas('laporans.penyelesaian', function($query) use ($layananIds) {
             $query->whereIn('penjab_layanan_id', $layananIds);
-        })->withCount(['laporans' => function($query) use ($layananIds) {
-            $query->whereHas('penyelesaian', function($q) use ($layananIds) {
-                $q->whereIn('penjab_layanan_id', $layananIds);
-            });
-        }])->get();
+        })->withCount([
+            'laporans as total_laporans_count' => function($query) use ($layananIds) {
+                $query->whereHas('penyelesaian', function($q) use ($layananIds) {
+                    $q->whereIn('penjab_layanan_id', $layananIds);
+                });
+            },
+            'laporans as active_laporans_count' => function($query) use ($layananIds) {
+                $query->whereHas('penyelesaian', function($q) use ($layananIds) {
+                    $q->whereIn('penjab_layanan_id', $layananIds);
+                })->where('status', 'on progress');
+            }
+        ])->get();
 
-        // Hitung statistik dari SEMUA layanan
         $totalLayanan = $penjabLayanans->count();
-
         $laporanAktif = Laporan::whereHas('penyelesaian', function($query) use ($layananIds) {
             $query->whereIn('penjab_layanan_id', $layananIds);
         })->whereIn('status', ['pending', 'on progress'])->count();
@@ -56,7 +65,7 @@ class PenjabController extends Controller
         })->where('status', 'complete')->count();
 
         return view('penjab.dashboard', compact(
-            'penjabLayanans', // plural
+            'penjabLayanans',
             'laporans',
             'teknisis',
             'totalLayanan',
@@ -64,50 +73,123 @@ class PenjabController extends Controller
             'laporanSelesai'
         ));
     }
-    public function layanan()
+
+    public function layananTeknisis($id)
     {
-        $penjabLayanan = PenjabLayanan::where('penjab_id', Auth::id())->first();
+        $layanan = PenjabLayanan::where('penjab_id', Auth::id())->findOrFail($id);
+        $penjabLayanans = $this->getPenjabLayanans();
 
-        if (!$penjabLayanan) {
-            return redirect()->route('penjab.dashboard')
-                ->with('error', 'Anda belum memiliki layanan yang ditugaskan.');
-        }
+        $teknisis = Teknisi::whereHas('laporans.penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->with(['laporans' => function($query) use ($id) {
+            $query->whereHas('penyelesaian', function($q) use ($id) {
+                $q->where('penjab_layanan_id', $id);
+            });
+        }])->get()->map(function($teknisi) {
+            $teknisi->active_laporans_count = $teknisi->laporans->where('status', 'on progress')->count();
+            $teknisi->total_laporans_count = $teknisi->laporans->count();
+            $teknisi->is_active = $teknisi->active_laporans_count > 0;
+            return $teknisi;
+        });
 
-        $layanan = PenjabLayanan::where('penjab_id', Auth::id())->get();
+        return view('penjab.layanan-teknisis', compact('layanan', 'teknisis', 'penjabLayanans'));
+    }
 
-        return view('penjab.layanan', compact('penjabLayanan', 'layanan'));
+    public function layananLaporans($id)
+    {
+        $layanan = PenjabLayanan::where('penjab_id', Auth::id())->findOrFail($id);
+        $penjabLayanans = $this->getPenjabLayanans();
+
+        $laporans = Laporan::whereHas('penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->with(['kategori', 'teknisis', 'penyelesaian'])->latest()->paginate(15);
+
+        return view('penjab.layanan-laporans', compact('layanan', 'laporans', 'penjabLayanans'));
     }
 
     public function laporan()
     {
-        $penjabLayanan = PenjabLayanan::where('penjab_id', Auth::id())->first();
+        $penjabLayanans = $this->getPenjabLayanans();
 
-        if (!$penjabLayanan) {
+        if ($penjabLayanans->isEmpty()) {
             return redirect()->route('penjab.dashboard')
                 ->with('error', 'Anda belum memiliki layanan yang ditugaskan.');
         }
 
-        $laporans = Laporan::whereHas('penyelesaian', function($query) use ($penjabLayanan) {
-            $query->where('penjab_layanan_id', $penjabLayanan->id);
-        })->with(['kategori', 'teknisis', 'penyelesaian'])->latest()->paginate(15);
+        $layananIds = $penjabLayanans->pluck('id')->toArray();
 
-        return view('penjab.laporan', compact('penjabLayanan', 'laporans'));
+        $laporans = Laporan::whereHas('penyelesaian', function($query) use ($layananIds) {
+            $query->whereIn('penjab_layanan_id', $layananIds);
+        })->with(['kategori', 'teknisis', 'penyelesaian.penjabLayanan'])->latest()->paginate(15);
+
+        return view('penjab.laporan', compact('penjabLayanans', 'laporans'));
     }
 
     public function laporanDetail($id)
     {
-        $penjabLayanan = PenjabLayanan::where('penjab_id', Auth::id())->first();
+        $penjabLayanans = $this->getPenjabLayanans();
 
-        if (!$penjabLayanan) {
+        if ($penjabLayanans->isEmpty()) {
             return redirect()->route('penjab.dashboard')
                 ->with('error', 'Anda belum memiliki layanan yang ditugaskan.');
         }
 
-        $laporan = Laporan::whereHas('penyelesaian', function($query) use ($penjabLayanan) {
-            $query->where('penjab_layanan_id', $penjabLayanan->id);
-        })->with(['kategori', 'teknisis', 'penyelesaian'])->findOrFail($id);
+        $layananIds = $penjabLayanans->pluck('id')->toArray();
 
-        return view('penjab.laporan-detail', compact('penjabLayanan', 'laporan'));
+        $laporan = Laporan::whereHas('penyelesaian', function($query) use ($layananIds) {
+            $query->whereIn('penjab_layanan_id', $layananIds);
+        })->with(['kategori', 'teknisis', 'penyelesaian.penjabLayanan'])->findOrFail($id);
+
+        return view('penjab.laporan-detail', compact('laporan', 'penjabLayanans'));
     }
+
+    public function layananDetail($id)
+    {
+        $layanan = PenjabLayanan::where('penjab_id', Auth::id())->findOrFail($id);
+        $penjabLayanans = $this->getPenjabLayanans();
+
+        $totalLaporanLayanan = Laporan::whereHas('penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->count();
+
+        $laporanAktifLayanan = Laporan::whereHas('penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->whereIn('status', ['pending', 'on progress'])->count();
+
+        $laporanSelesaiLayanan = Laporan::whereHas('penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->where('status', 'complete')->count();
+
+        $teknisisLayanan = Teknisi::whereHas('laporans.penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->withCount([
+            'laporans as total_laporans_count' => function($query) use ($id) {
+                $query->whereHas('penyelesaian', function($q) use ($id) {
+                    $q->where('penjab_layanan_id', $id);
+                });
+            },
+            'laporans as active_laporans_count' => function($query) use ($id) {
+                $query->whereHas('penyelesaian', function($q) use ($id) {
+                    $q->where('penjab_layanan_id', $id);
+                })->where('status', 'on progress');
+            }
+        ])->get();
+
+        $laporansLayanan = Laporan::whereHas('penyelesaian', function($query) use ($id) {
+            $query->where('penjab_layanan_id', $id);
+        })->with(['kategori', 'teknisis', 'penyelesaian.penjabLayanan'])->latest()->take(10)->get();
+
+        return view('penjab.layanan-detail', compact(
+            'layanan',
+            'penjabLayanans',
+            'totalLaporanLayanan',
+            'laporanAktifLayanan',
+            'laporanSelesaiLayanan',
+            'teknisisLayanan',
+            'laporansLayanan'
+        ));
+    }
+
+
 }
 
