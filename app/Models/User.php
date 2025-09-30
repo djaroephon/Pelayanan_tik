@@ -51,4 +51,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function penjabLayanans()
+{
+    return $this->hasMany(PenjabLayanan::class, 'penjab_id');
+}
 }

@@ -25,4 +25,17 @@ class Teknisi extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    // Count active laporans (on progress)
+    public function getActiveLaporansCountAttribute()
+    {
+        return $this->laporans()->where('status', 'on progress')->count();
+    }
+
+    // Check if teknisi is active
+    public function getIsActiveAttribute()
+    {
+        return $this->active_laporans_count > 0;
+    }
 }

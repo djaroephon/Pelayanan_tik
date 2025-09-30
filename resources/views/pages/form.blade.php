@@ -99,9 +99,19 @@
                         >
                     </div>
 
+                     <div class="mb-3">
+                        <label class="form-label">No HP Pelapor</label>
+                        <input
+                            type="text"
+                            name="no_hp_pelapor"
+                            value="{{ $guest->no_hp }}"
+                            class="form-control"
+                            readonly
+                        >
+                    </div>
+
                     @php
                         $fields = [
-                            ['label' => 'No HP Pelapor', 'name' => 'no_hp_pelapor', 'type' => 'text', 'required' => true],
                             ['label' => 'Email Pelapor', 'name' => 'email_pelapor', 'type' => 'email', 'required' => false],
                             ['label' => 'Bidang / UPTD', 'name' => 'bidang', 'type' => 'text', 'required' => true],
                             ['label' => 'IP Jaringan', 'name' => 'ip_jaringan', 'type' => 'text', 'placeholder' => 'contoh: 192.168.1.1'],

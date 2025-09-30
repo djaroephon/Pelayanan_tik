@@ -30,6 +30,7 @@ class AuthController extends Controller
             return match ($user->role) {
                 'admin', 'operator' => redirect()->route('admin.dashboard'),
                 'teknisi' => redirect()->route('teknisi.index'),
+                'penjab' => redirect()->route('penjab.dashboard'),
                 default => redirect()->route('landing'),
             };
         }

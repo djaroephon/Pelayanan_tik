@@ -231,12 +231,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('components.sidebar')
-
-        <!-- Content -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            <!-- Header -->
             <div class="page-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1><i class="fas fa-tags me-2"></i>Manajemen Kategori</h1>
@@ -252,7 +248,6 @@
                 </div>
             @endif
 
-            <!-- Action Card -->
             <div class="card card-custom">
                 <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-cogs me-2"></i>Actions</span>
@@ -262,7 +257,6 @@
                 </div>
             </div>
 
-            <!-- Table Card -->
             <div class="card card-custom">
                 <div class="card-header card-header-custom">
                     <i class="fas fa-list me-2"></i>Daftar Kategori
@@ -284,12 +278,10 @@
                                             <td class="text-center"><span class="badge-counter">{{ $loop->iteration }}</span></td>
                                             <td class="fw-semibold">{{ $item->nama_kategori }}</td>
                                             <td class="text-center">
-                                                <!-- Tombol Edit -->
                                                 <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $item->id }}">
                                                     <i class="fas fa-edit me-1"></i> Edit
                                                 </button>
 
-                                                <!-- Tombol Delete -->
                                                 <form action="{{ route('kategori.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
                                                     @csrf
                                                     @method('DELETE')
