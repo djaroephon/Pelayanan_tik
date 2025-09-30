@@ -231,11 +231,11 @@
                     <i class="fas fa-users-cog"></i>Teknisi
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="{{ route('penjab.index') }}">
                     <i class="fas fa-user-tie"></i>Penjab
                 </a>
-            </li>
+            </li> --}}
             <li>
                 <a href="{{ route('admin.users.index') }}">
                     <i class="fas fa-user-circle"></i>Account
