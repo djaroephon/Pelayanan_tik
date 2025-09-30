@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('penjab_id')->constrained('users')->onDelete('cascade');
             $table->string('nama_penjab_layanan', 100);
-            $table->text('deskripsi')->nullable()->after('nama_penjab_layanan');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
