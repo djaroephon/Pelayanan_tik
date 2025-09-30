@@ -19,12 +19,19 @@ class LaporanExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
         return Laporan::with([
             'kategori',
             'teknisis',
-            'penyelesaian.penjabLayanan',
+            'penyelesaian.penjabLayanan.penjab', // Tambahkan relasi penjab
         ])->get();
     }
 
     public function map($row): array
     {
+        // Format untuk penjab layanan: "nama - nama_penjab_layanan"
+        $penjabLayanan = '-';
+        if ($row->penyelesaian?->penjabLayanan) {
+            $namaPenjab = $row->penyelesaian->penjabLayanan->penjab->name ?? 'nama';
+            $penjabLayanan = $namaPenjab . ' - ' . $row->penyelesaian->penjabLayanan->nama_penjab_layanan;
+        }
+
         return [
             $row->id,
             $row->nama_pelapor,
@@ -38,7 +45,7 @@ class LaporanExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
             $row->ip_server,
             $row->kategori?->nama_kategori ?? '-',
             $row->teknisis->pluck('nama_teknisi')->join(', '),
-            $row->penyelesaian?->penjabLayanan?->nama_penjab_layanan ?? '-',
+            $penjabLayanan, // Format: "nama - nama_penjab_layanan"
             $row->teknisis->pluck('pivot.deskripsi_masalah')->filter()->join(' | '),
             $row->teknisis->pluck('pivot.deskripsi_penyelesaian')->filter()->join(' | '),
             $row->teknisis->pluck('pivot.selesai_pada')->filter()
