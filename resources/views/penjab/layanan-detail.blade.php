@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard Penjab Layanan</title>
+    <title>Detail Layanan - {{ $layanan->nama_penjab_layanan }}</title>
 
     <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -374,112 +374,6 @@
             overflow: hidden;
         }
 
-        .sidebar .dropdown-menu {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    transform: translateY(10px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    display: block;
-}
-
-.sidebar .dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.sidebar .dropdown-item {
-    color: var(--gray-800);
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    margin: 0.1rem 0.5rem;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    position: relative;
-    overflow: hidden;
-}
-
-.sidebar .dropdown-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient-1);
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: -1;
-}
-
-.sidebar .dropdown-item:hover,
-.sidebar .dropdown-item.active {
-    color: white;
-    transform: translateX(8px);
-}
-
-.sidebar .dropdown-item:hover::before,
-.sidebar .dropdown-item.active::before {
-    opacity: 1;
-    left: 0;
-}
-
-/* Enhanced Nav Link Hover */
-.sidebar .nav-link {
-    position: relative;
-    overflow: hidden;
-}
-
-.sidebar .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: -100%;
-    width: 100%;
-    height: 2px;
-    background: var(--gradient-3);
-    transition: all 0.3s ease;
-}
-
-.sidebar .nav-link:hover::after,
-.sidebar .nav-link.active::after {
-    left: 0;
-}
-
-/* Smooth transitions for all sidebar elements */
-.sidebar * {
-    transition: all 0.3s ease;
-}
-
-/* Mobile dropdown fix */
-@media (max-width: 991.98px) {
-    .sidebar .dropdown-menu {
-        position: static;
-        transform: none;
-        opacity: 1;
-        visibility: visible;
-        box-shadow: none;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar .dropdown-item {
-        color: rgba(255, 255, 255, 0.9);
-        margin: 0.1rem 0.75rem;
-    }
-
-    .sidebar .dropdown-item:hover,
-    .sidebar .dropdown-item.active {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-    }
-}
-
         .status-badge::before {
             content: '';
             position: absolute;
@@ -570,6 +464,27 @@
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Breadcrumb Enhanced */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item a:hover {
+            color: var(--primary-dark);
         }
 
         /* Quick Actions */
@@ -703,57 +618,7 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Mobile Header */
-        .mobile-header {
-            display: none;
-            background: #fff;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        #toggleSidebar {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: transform 0.3s ease;
-        }
-
-        #toggleSidebar:hover {
-            transform: rotate(90deg);
-        }
-
-        /* Backdrop (mobile) */
-        #sidebarBackdrop {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1050;
-            backdrop-filter: blur(3px);
-        }
-
-        #sidebarBackdrop.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        /* Responsive table columns (hide on small) */
-        .col-hidden {
-            display: none;
-        }
-
-        @media (min-width: 992px) {
-            .col-hidden {
-                display: table-cell;
-            }
-        }
-
-        /* Desktop vs Mobile */
+        /* Responsive */
         @media (max-width: 991.98px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -773,25 +638,13 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-            }
-        }
-
-        /* Compact action btn on mobile */
-        @media (max-width: 576px) {
-            .btn-action span {
-                display: none;
-            }
-
-            .btn-action i {
-                margin-right: 0;
-            }
-
-            .stat-card {
-                padding: 1.5rem 1rem;
-            }
-
-            .stat-card .fs-2 {
-                font-size: 2rem !important;
+                background: #fff;
+                padding: 1rem 1.5rem;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                border-bottom: 1px solid var(--gray-200);
             }
         }
 
@@ -812,44 +665,6 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
-        }
-
-        /* Alert styles */
-        .alert {
-            border-radius: 16px;
-            border: none;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-left: 4px solid var(--warning);
-        }
-
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
@@ -883,20 +698,21 @@
                 </div>
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a href="{{ route('penjab.dashboard') }}" class="nav-link active">
+                        <a href="{{ route('penjab.dashboard') }}" class="nav-link">
                             <i class="fa-solid fa-house-user"></i> <span>Dashboard</span>
                         </a>
                     </li>
 
                     <!-- Dropdown Layanan Saya -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-list"></i> <span>Layanan Saya</span>
                         </a>
                         <ul class="dropdown-menu">
-                            @foreach($penjabLayanans as $layanan)
+                            @foreach($penjabLayanans as $item)
                             <li>
-                                <a class="dropdown-item" href="{{ route('penjab.layanan.detail', $layanan->id) }}">
+                                <a class="dropdown-item {{ $item->id == $layanan->id ? 'active' : '' }}"
+                                   href="{{ route('penjab.layanan.detail', $item->id) }}">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
                                             <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
@@ -904,9 +720,12 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <div class="fw-semibold">{{ $layanan->nama_penjab_layanan }}</div>
-                                            <small class="text-muted">{{ $layanan->laporans_count }} laporan</small>
+                                            <div class="fw-semibold">{{ $item->nama_penjab_layanan }}</div>
+                                            <small class="text-muted">{{ $item->laporans_count }} laporan</small>
                                         </div>
+                                        @if($item->id == $layanan->id)
+                                            <i class="fas fa-chevron-right text-primary ms-2"></i>
+                                        @endif
                                     </div>
                                 </a>
                             </li>
@@ -916,7 +735,6 @@
                             @endif
                         </ul>
                     </li>
-
 
                     <li class="nav-item mt-5">
                         <a href="{{ route('logout') }}" class="nav-link"
@@ -933,14 +751,14 @@
             </div>
         </nav>
 
-        <!-- Main -->
+        <!-- Main Content -->
         <main class="col-md-9 col-lg-10 main-content">
             <!-- Mobile Header -->
             <div class="mobile-header">
                 <button id="toggleSidebar" aria-label="Buka/tutup sidebar" title="Toggle Sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h5 class="mb-0">Dashboard Penjab</h5>
+                <h5 class="mb-0">Detail Layanan</h5>
                 <div class="d-flex align-items-center">
                     <span class="badge bg-primary me-2">Online</span>
                     <i class="fas fa-bell text-muted"></i>
@@ -950,8 +768,8 @@
             <!-- Desktop Header -->
             <div class="d-none d-lg-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 fade-in-up">
                 <div>
-                    <h1 class="h2 mb-0 page-title">Dashboard Penjab Layanan</h1>
-                    <p class="text-muted mb-0">Ringkasan layanan dan laporan yang menjadi tanggung jawab Anda</p>
+                    <h1 class="h2 mb-0 page-title">Detail Layanan: {{ $layanan->nama_penjab_layanan }}</h1>
+                    <p class="text-muted mb-0">Ringkasan dan statistik lengkap untuk layanan ini</p>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="search-container flex-grow-1" style="max-width: 320px;">
@@ -976,71 +794,125 @@
                 </div>
             </div>
 
-            @if($penjabLayanans->isEmpty())
-                <div class="alert alert-warning fade-in-up">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Anda belum memiliki layanan yang ditugaskan. Silakan hubungi administrator.
-                </div>
-            @else
-                <!-- Stat Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.1s;">
-                        <div class="stat-card bg-grad-primary">
-                            <div class="card-body position-relative">
-                                <h5 class="card-title mb-1">Layanan Saya</h5>
-                                <p class="fs-2 fw-bold mb-0">{{ $totalLayanan }}</p>
-                                <p class="mb-0"><small>Total layanan yang dikelola</small></p>
-                                <i class="fas fa-list icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.2s;">
-                        <div class="stat-card bg-grad-warning">
-                            <div class="card-body position-relative">
-                                <h5 class="card-title mb-1">Laporan Aktif</h5>
-                                <p class="fs-2 fw-bold mb-0">{{ $laporanAktif }}</p>
-                                <p class="mb-0"><small>Laporan yang sedang diproses</small></p>
-                                <i class="fas fa-tasks icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.3s;">
-                        <div class="stat-card bg-grad-success">
-                            <div class="card-body position-relative">
-                                <h5 class="card-title mb-1">Selesai</h5>
-                                <p class="fs-2 fw-bold mb-0">{{ $laporanSelesai }}</p>
-                                <p class="mb-0"><small>Laporan selesai bulan ini</small></p>
-                                <i class="fas fa-check-circle icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4 fade-in-up" style="animation-delay: 0.1s;">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('penjab.dashboard') }}"><i class="fas fa-home me-1"></i>Dashboard</a></li>
+                    <li class="breadcrumb-item active">{{ $layanan->nama_penjab_layanan }}</li>
+                </ol>
+            </nav>
 
-                <!-- Layanan Saya Section -->
-                <div class="info-card mb-4 fade-in-up" style="animation-delay: 0.4s;">
-                    <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-semibold">Layanan Saya ({{ $penjabLayanans->count() }})</h6>
-                        <span class="badge bg-primary rounded-pill">{{ $totalLayanan }} Total</span>
+            <!-- Stat Cards untuk Layanan Spesifik -->
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="stat-card bg-grad-primary">
+                        <div class="card-body position-relative">
+                            <h5 class="card-title mb-1">Total Laporan</h5>
+                            <p class="fs-2 fw-bold mb-0">{{ $totalLaporanLayanan }}</p>
+                            <p class="mb-0"><small>Total laporan untuk layanan ini</small></p>
+                            <i class="fas fa-list icon"></i>
+                        </div>
                     </div>
-                    <div class="card-body p-0">
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="stat-card bg-grad-warning">
+                        <div class="card-body position-relative">
+                            <h5 class="card-title mb-1">Laporan Aktif</h5>
+                            <p class="fs-2 fw-bold mb-0">{{ $laporanAktifLayanan }}</p>
+                            <p class="mb-0"><small>Laporan yang sedang diproses</small></p>
+                            <i class="fas fa-tasks icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="stat-card bg-grad-success">
+                        <div class="card-body position-relative">
+                            <h5 class="card-title mb-1">Selesai</h5>
+                            <p class="fs-2 fw-bold mb-0">{{ $laporanSelesaiLayanan }}</p>
+                            <p class="mb-0"><small>Laporan selesai</small></p>
+                            <i class="fas fa-check-circle icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informasi Layanan -->
+            <div class="info-card mb-4 fade-in-up" style="animation-delay: 0.5s;">
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-semibold">Informasi Layanan</h6>
+                    <span class="badge bg-primary rounded-pill">ID: {{ $layanan->id }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-semibold mb-3 text-primary">Detail Layanan</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td width="35%"><strong>Nama Layanan</strong></td>
+                                    <td>
+                                        <span class="fw-semibold text-dark">{{ $layanan->nama_penjab_layanan }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tanggal Dibuat</strong></td>
+                                    <td>
+                                        <i class="fas fa-calendar me-2 text-muted"></i>
+                                        {{ $layanan->created_at->format('d/m/Y H:i') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status</strong></td>
+                                    <td>
+                                        <span class="badge bg-success rounded-pill">
+                                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                            Aktif
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-semibold mb-3 text-primary">Quick Actions</h6>
+                            <div class="quick-actions">
+
+                                <a href="{{ route('penjab.layanan.laporans', $layanan->id) }}" class="action-btn">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <div class="action-text">Lihat Laporan</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teknisi untuk Layanan Ini -->
+            <div class="info-card mb-4 fade-in-up" style="animation-delay: 0.6s;">
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-semibold">Teknisi yang Menangani Layanan Ini</h6>
+                    <span class="badge bg-primary rounded-pill">{{ $teknisisLayanan->count() }} Teknisi</span>
+                </div>
+                <div class="card-body p-0">
+                    @if($teknisisLayanan->isEmpty())
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h4 class="mb-1">Belum ada teknisi</h4>
+                            <p class="mb-0">Belum ada teknisi yang ditugaskan pada layanan ini.</p>
+                        </div>
+                    @else
                         <div class="table-container">
                             <table class="table table-hover align-middle mb-0">
                                 <thead>
                                 <tr>
                                     <th style="width:48px;">#</th>
-                                    <th>Nama Layanan</th>
-                                    <th style="width:120px;">Jumlah Laporan</th>
-                                    <th style="width:120px;">Teknisi Aktif</th>
-                                    <th style="width:110px;">Aksi</th>
+                                    <th>Nama Teknisi</th>
+                                    <th class="col-hidden">No HP</th>
+                                    <th style="width:120px;">Total Laporan</th>
+                                    <th style="width:120px;">Laporan Aktif</th>
+                                    <th style="width:110px;">Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($penjabLayanans as $layanan)
-                                    @php
-                                        $activeTeknisis = $layanan->teknisis->filter(function($teknisi) {
-                                            return $teknisi->laporans->where('status', 'on progress')->count() > 0;
-                                        })->count();
-                                    @endphp
+                                @foreach($teknisisLayanan as $teknisi)
                                     <tr>
                                         <td>
                                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px;">
@@ -1048,228 +920,155 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <strong>{{ $layanan->nama_penjab_layanan }}</strong>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-primary rounded-pill p-2 fs-6">{{ $layanan->laporans_count ?? 0 }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-success rounded-pill p-2 fs-6">{{ $activeTeknisis }} Aktif</span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="{{ route('penjab.layanan.laporans', $layanan->id) }}"
-                                                   class="btn btn-outline-primary btn-action" title="Lihat Laporan">
-                                                    <i class="fas fa-clipboard-list"></i>
-                                                    <span class="d-none d-md-inline">Laporan</span>
-                                                </a>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                                    <i class="fas fa-user-circle text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold">{{ $teknisi->nama_teknisi }}</div>
+                                                    <small class="text-muted">ID: {{ $teknisi->id }}</small>
+                                                </div>
                                             </div>
+                                        </td>
+                                        <td class="col-hidden">
+                                            <i class="fas fa-phone me-2 text-muted"></i>
+                                            {{ $teknisi->no_hp_teknisi }}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary rounded-pill p-2 fs-6">{{ $teknisi->total_laporans_count }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning rounded-pill p-2 fs-6">{{ $teknisi->active_laporans_count }}</span>
+                                        </td>
+                                        <td>
+                                            @if($teknisi->active_laporans_count > 0)
+                                                <span class="status-badge badge-active">
+                                                    <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                                    Aktif
+                                                </span>
+                                            @else
+                                                <span class="status-badge badge-inactive">
+                                                    <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                                    Non-Aktif
+                                                </span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Laporan Terbaru untuk Layanan Ini -->
+            <div class="info-card fade-in-up" style="animation-delay: 0.7s;">
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 fw-semibold">Laporan Terbaru untuk Layanan Ini</h6>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('penjab.layanan.laporans', $layanan->id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-list me-1"></i>Lihat Semua
+                        </a>
+                        <button class="btn btn-sm btn-outline-secondary" id="refreshBtn" title="Refresh" aria-label="Refresh">
+                            <i class="fas fa-rotate-right"></i>
+                        </button>
                     </div>
                 </div>
-
-                <!-- Teknisi Section -->
-                <div class="info-card mb-4 fade-in-up" style="animation-delay: 0.5s;">
-                    <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-semibold">Teknisi yang Ditugaskan</h6>
-                        <span class="badge bg-primary rounded-pill">{{ $teknisis->count() }} Teknisi</span>
-                    </div>
-                    <div class="card-body p-0">
-                        @if($teknisis->isEmpty())
-                            <div class="empty-state">
-                                <i class="fas fa-users"></i>
-                                <h4 class="mb-1">Belum ada teknisi</h4>
-                                <p class="mb-0">Belum ada teknisi yang ditugaskan pada layanan Anda.</p>
-                            </div>
-                        @else
-                            <div class="table-container">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th style="width:48px;">#</th>
-                                        <th>Nama Teknisi</th>
-                                        <th class="col-hidden">No HP</th>
-                                        <th style="width:120px;">Total Laporan</th>
-                                        <th style="width:120px;">Laporan Aktif</th>
-                                        <th style="width:110px;">Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($teknisis as $teknisi)
-                                        <tr>
-                                            <td>
-                                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px;">
-                                                    {{ $loop->iteration }}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-                                                        <i class="fas fa-user-circle text-primary"></i>
-                                                    </div>
-                                                    <div>
-                                                        <div class="fw-semibold">{{ $teknisi->nama_teknisi }}</div>
-                                                        <small class="text-muted">ID: {{ $teknisi->id }}</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="col-hidden">
-                                                <i class="fas fa-phone me-2 text-muted"></i>
-                                                {{ $teknisi->no_hp_teknisi }}
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary rounded-pill p-2 fs-6">{{ $teknisi->total_laporans_count }}</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-warning rounded-pill p-2 fs-6">{{ $teknisi->active_laporans_count }}</span>
-                                            </td>
-                                            <td>
-                                                @if($teknisi->active_laporans_count > 0)
-                                                    <span class="status-badge badge-active">
-                                                        <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
-                                                        Aktif
-                                                    </span>
-                                                @else
-                                                    <span class="status-badge badge-inactive">
-                                                        <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
-                                                        Non-Aktif
-                                                    </span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Laporan Terbaru Section -->
-                <div class="info-card fade-in-up" style="animation-delay: 0.6s;">
-                    <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 fw-semibold">Laporan Terbaru</h6>
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="{{ route('penjab.laporan') }}" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-list me-1"></i>Lihat Semua
-                            </a>
-                            <button class="btn btn-sm btn-outline-secondary" id="refreshBtn" title="Refresh" aria-label="Refresh">
-                                <i class="fas fa-rotate-right"></i>
-                            </button>
+                <div class="card-body p-0">
+                    @if($laporansLayanan->isEmpty())
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h4 class="mb-1">Tidak ada laporan</h4>
+                            <p class="mb-0">Saat ini tidak ada laporan yang terkait dengan layanan ini.</p>
                         </div>
-                    </div>
-                    <div class="card-body p-0">
-                        @if($laporans->isEmpty())
-                            <div class="empty-state">
-                                <i class="fas fa-clipboard-list"></i>
-                                <h4 class="mb-1">Tidak ada laporan</h4>
-                                <p class="mb-0">Saat ini tidak ada laporan yang terkait dengan layanan Anda.</p>
-                            </div>
-                        @else
-                            <div class="table-container">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead>
+                    @else
+                        <div class="table-container">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                <tr>
+                                    <th style="width:48px;">#</th>
+                                    <th>Pelapor</th>
+                                    <th class="col-hidden">Instansi</th>
+                                    <th>Permasalahan</th>
+                                    <th style="width:120px;">Tanggal</th>
+                                    <th style="width:120px;">Status</th>
+                                    <th style="width:110px;">Aksi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($laporansLayanan as $laporan)
                                     <tr>
-                                        <th style="width:48px;">#</th>
-                                        <th>Pelapor</th>
-                                        <th class="col-hidden">Instansi</th>
-                                        <th>Permasalahan</th>
-                                        <th class="col-hidden">Layanan</th>
-                                        <th style="width:120px;">Tanggal</th>
-                                        <th style="width:120px;">Status</th>
-                                        <th style="width:110px;">Aksi</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($laporans as $laporan)
-                                        @php
-                                            $penyelesaian = $laporan->penyelesaian;
-                                            $layanan = $penyelesaian ? $penyelesaian->penjabLayanan : null;
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                <div class="bg-light text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px;">
-                                                    {{ $loop->iteration }}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="fw-semibold">{{ $laporan->nama_pelapor }}</div>
-                                                <small class="text-muted">
-                                                    <i class="fas fa-phone me-1"></i>
-                                                    {{ $laporan->no_hp_pelapor }}
-                                                </small>
-                                            </td>
-                                            <td class="col-hidden">
-                                                <i class="fas fa-building me-2 text-muted"></i>
-                                                {{ $laporan->instansi }}
-                                            </td>
-                                            <td>
-                                                @php
-                                                    $fullText = $laporan->laporan_permasalahan;
-                                                    $shortText = \Illuminate\Support\Str::limit($fullText, 40);
-                                                @endphp
-                                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $fullText }}">
-                                                    {{ $shortText }}
+                                        <td>
+                                            <div class="bg-light text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px;">
+                                                {{ $loop->iteration }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold">{{ $laporan->nama_pelapor }}</div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-phone me-1"></i>
+                                                {{ $laporan->no_hp_pelapor }}
+                                            </small>
+                                        </td>
+                                        <td class="col-hidden">
+                                            <i class="fas fa-building me-2 text-muted"></i>
+                                            {{ $laporan->instansi }}
+                                        </td>
+                                        <td>
+                                            @php
+                                                $fullText = $laporan->laporan_permasalahan;
+                                                $shortText = \Illuminate\Support\Str::limit($fullText, 40);
+                                            @endphp
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $fullText }}">
+                                                {{ $shortText }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="text-center">
+                                                <div class="fw-semibold">{{ $laporan->created_at->format('d/m/Y') }}</div>
+                                                <small class="text-muted">{{ $laporan->created_at->format('H:i') }}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if($laporan->status === 'pending')
+                                                <span class="status-badge badge-pending">
+                                                    <i class="fas fa-clock me-1"></i>Pending
                                                 </span>
-                                            </td>
-                                            <td class="col-hidden">
-                                                @if($layanan)
-                                                    <span class="badge bg-info rounded-pill">{{ $layanan->nama_penjab_layanan }}</span>
-                                                @else
-                                                    <span class="badge bg-secondary rounded-pill">Belum ditugaskan</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <div class="fw-semibold">{{ $laporan->created_at->format('d/m/Y') }}</div>
-                                                    <small class="text-muted">{{ $laporan->created_at->format('H:i') }}</small>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @if($laporan->status === 'pending')
-                                                    <span class="status-badge badge-pending">
-                                                        <i class="fas fa-clock me-1"></i>Pending
-                                                    </span>
-                                                @elseif($laporan->status === 'on progress')
-                                                    <span class="status-badge badge-progress">
-                                                        <i class="fas fa-spinner me-1 fa-spin"></i>Proses
-                                                    </span>
-                                                @elseif($laporan->status === 'complete')
-                                                    <span class="status-badge badge-complete">
-                                                        <i class="fas fa-check me-1"></i>Selesai
-                                                    </span>
-                                                @else
-                                                    <span class="status-badge badge-pending">{{ ucfirst($laporan->status) }}</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('penjab.laporan.detail', $laporan->id) }}"
-                                                   class="btn btn-sm btn-primary btn-action">
-                                                    <i class="fas fa-eye me-1"></i>
-                                                    <span>Detail</span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
+                                            @elseif($laporan->status === 'on progress')
+                                                <span class="status-badge badge-progress">
+                                                    <i class="fas fa-spinner me-1 fa-spin"></i>Proses
+                                                </span>
+                                            @elseif($laporan->status === 'complete')
+                                                <span class="status-badge badge-complete">
+                                                    <i class="fas fa-check me-1"></i>Selesai
+                                                </span>
+                                            @else
+                                                <span class="status-badge badge-pending">{{ ucfirst($laporan->status) }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('penjab.laporan.detail', $laporan->id) }}"
+                                               class="btn btn-sm btn-primary btn-action">
+                                                <i class="fas fa-eye me-1"></i>
+                                                <span>Detail</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
+            </div>
 
-                <!-- Footer -->
-                <div class="footer fade-in-up" style="animation-delay: 0.7s;">
-                    <p class="mb-0">
-                        <strong>Diskominsa Aceh 24</strong> &copy; 2025 All rights reserved.
-                    </p>
-                </div>
-            @endif
+            <!-- Footer -->
+            <div class="footer fade-in-up" style="animation-delay: 0.8s;">
+                <p class="mb-0">
+                    <strong>Diskominsa Aceh </strong> &copy; 2025 All rights reserved.
+                </p>
+            </div>
         </main>
     </div>
 </div>
@@ -1353,16 +1152,6 @@
 
             card.addEventListener('mouseleave', () => {
                 card.classList.remove('float');
-            });
-        });
-
-        // Close sidebar when nav link is clicked on mobile
-        const navLinks = document.querySelectorAll('.sidebar .nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 992) {
-                    closeSidebar();
-                }
             });
         });
     });
