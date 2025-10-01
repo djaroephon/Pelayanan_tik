@@ -1266,7 +1266,7 @@
                 <!-- Footer -->
                 <div class="footer fade-in-up" style="animation-delay: 0.7s;">
                     <p class="mb-0">
-                        <strong>Diskominsa Aceh 24</strong> &copy; 2025 All rights reserved.
+                        <strong>Diskominsa Aceh</strong> &copy; 2025 All rights reserved.
                     </p>
                 </div>
             @endif
