@@ -150,7 +150,6 @@
             font-size: 1.1rem;
         }
 
-        /* Main content area */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 20px;
@@ -231,6 +230,11 @@
                     <i class="fas fa-users-cog"></i>Teknisi
                 </a>
             </li>
+            <li>
+    <a href="{{ route('wilayah.index') }}">
+        <i class="fas fa-map-marker-alt"></i>Wilayah
+    </a>
+</li>
             {{-- <li>
                 <a href="{{ route('penjab.index') }}">
                     <i class="fas fa-user-tie"></i>Penjab
