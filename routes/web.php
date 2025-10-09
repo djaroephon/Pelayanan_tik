@@ -12,7 +12,9 @@ use App\Http\Controllers\Export\ExportController;
 use App\Http\Controllers\GuestAuthController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Penjab\PenjabUserController;
+use App\Http\Controllers\Admin\WilayahController;
 use App\Http\Controllers\Teknisi\TeknisiLaporController;
+
 use App\Http\Middleware\CheckRole;
 use App\Models\Guest;
 use App\Models\PenjabLayanan;
@@ -50,6 +52,12 @@ Route::middleware(['auth', CheckRole::class.':admin,operator'])->group(function 
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
+    Route::get('/wilayah', [WilayahController::class, 'index'])->name('wilayah.index');
+    Route::get('/wilayah/create', [WilayahController::class, 'create'])->name('wilayah.create');
+    Route::post('/wilayah', [WilayahController::class, 'store'])->name('wilayah.store');
+    Route::get('/wilayah/{id}/edit', [WilayahController::class, 'edit'])->name('wilayah.edit');
+    Route::put('/wilayah/{id}', [WilayahController::class, 'update'])->name('wilayah.update');
+    Route::delete('/wilayah/{id}', [WilayahController::class, 'destroy'])->name('wilayah.destroy');
     // Route::get('/penjab', [PenjabController::class, 'index'])->name('penjab.index');
     // Route::post('/penjab', [PenjabController::class, 'store'])->name('penjab.store');
     // Route::put('/penjab/{id}', [PenjabController::class, 'update'])->name('penjab.update');
