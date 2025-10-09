@@ -27,15 +27,18 @@ class Teknisi extends Model
     }
 
 
-    // Count active laporans (on progress)
     public function getActiveLaporansCountAttribute()
     {
         return $this->laporans()->where('status', 'on progress')->count();
     }
 
-    // Check if teknisi is active
     public function getIsActiveAttribute()
     {
         return $this->active_laporans_count > 0;
+    }
+
+     public function wilayahs()
+    {
+        return $this->belongsToMany(WilayahTeknisi::class, 'teknisi_wilayah', 'teknisi_id', 'wilayah_teknisi_id');
     }
 }
