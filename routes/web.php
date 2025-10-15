@@ -12,6 +12,8 @@ use App\Http\Controllers\Export\ExportController;
 use App\Http\Controllers\GuestAuthController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Teknisi\TeknisiLaporController;
+use App\Http\Controllers\RelokasiController;
+use App\Http\Controllers\Admin\RelokasiAdminController;
 use App\Http\Middleware\CheckRole;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +24,10 @@ Route::middleware(['auth:guest'])->group(function () {
     Route::get('/lapor', [LaporanController::class, 'Getform'])->name('pages.form');
     Route::post('/lapor', [LaporanController::class, 'SubmitForm'])->name('lapor.submit');
     Route::get('/laporan-saya', [GuestAuthController::class, 'laporanSaya'])->name('guest.laporan.saya');
+
+     Route::get('/relokasi/create', [RelokasiController::class, 'create'])->name('relokasi.create');
+    Route::post('/relokasi', [RelokasiController::class, 'store'])->name('relokasi.store');
+    Route::get('/relokasi', [RelokasiController::class, 'index'])->name('relokasi.index');
 });
 
 // Route guest auth
@@ -77,6 +83,11 @@ Route::middleware(['auth', CheckRole::class.':admin,operator'])->group(function 
     Route::get('/laporan', [LaporanAdminController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/{laporan}/edit', [LaporanAdminController::class, 'edit'])->name('laporan.edit');
     Route::put('/laporan/{laporan}', [LaporanAdminController::class, 'update'])->name('laporan.update');
+
+    Route::get('/relokasi', [RelokasiAdminController::class, 'index'])->name('admin.relokasi.index');
+    Route::get('/relokasi/{relokasi}/edit', [RelokasiAdminController::class, 'edit'])->name('admin.relokasi.edit');
+    Route::put('/relokasi/{relokasi}', [RelokasiAdminController::class, 'update'])->name('admin.relokasi.update');
+    Route::delete('/relokasi/{relokasi}', [RelokasiAdminController::class, 'destroy'])->name('admin.relokasi.destroy');
 });
 
 Route::middleware(['auth', CheckRole::class.':teknisi'])->name('teknisi.')->prefix('teknisi')->group(function () {
