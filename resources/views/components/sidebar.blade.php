@@ -248,36 +248,13 @@
             width: 40px;
             height: 40px;
             align-items: center;
-            padding: 0.8rem 1.2rem;
-            color: #f8d7da !important;
-            background: linear-gradient(to right, #dc3545, #c82333);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: var(--sidebar-transition);
-            font-weight: 500;
-        }
-
-        .logout-link:hover {
-            background: linear-gradient(to right, #c82333, #a71e2a);
-            color: #ffffff !important;
-            transform: translateX(5px);
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
-        }
-
-        .logout-link i {
-            width: 24px;
-            margin-right: 12px;
-            font-size: 1.1rem;
-        }
-
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 20px;
-            transition: var(--sidebar-transition);
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
     }
 </style>
-<body>
+
 <!-- Sidebar Toggle Button (Mobile Only) -->
 <button class="sidebar-toggle d-lg-none">
     <i class="fas fa-bars"></i>
@@ -359,70 +336,8 @@
         </form>
     </div>
 </div>
-    <!-- Sidebar Toggle Button (Mobile Only) -->
-    <button class="sidebar-toggle d-lg-none">
-        <i class="fas fa-bars"></i>
-    </button>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h4><i class="fas fa-user-shield me-2"></i>Admin Panel</h4>
-        </div>
-
-        <ul class="sidebar-nav">
-            <li>
-                <a href="{{ route('admin.dashboard') }}" class="active">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('kategori.index') }}">
-                    <i class="fas fa-tags"></i>Kategori
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('laporan.index') }}">
-                    <i class="fas fa-clipboard-list"></i>Kelola Laporan
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('teknisiAdmin.index') }}">
-                    <i class="fas fa-users-cog"></i>Teknisi
-                </a>
-            </li>
-            <li>
-    <a href="{{ route('wilayah.index') }}">
-        <i class="fas fa-map-marker-alt"></i>Wilayah
-    </a>
-</li>
-
-            <li>
-                <a href="{{ route('admin.users.index') }}">
-                    <i class="fas fa-user-circle"></i>Account
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.guests.index') }}">
-                    <i class="fas fa-user-friends"></i>Guest Accounts
-                </a>
-            </li>
-        </ul>
-
-        <div class="logout-section">
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-               class="logout-link">
-                <i class="fas fa-sign-out-alt"></i>Logout
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-        </div>
-    </div>
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.querySelector('.sidebar');
         const sidebarToggle = document.querySelector('.sidebar-toggle');
@@ -434,6 +349,7 @@
             });
         }
 
+        // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
             if (window.innerWidth < 992 &&
                 !sidebar.contains(event.target) &&
@@ -442,6 +358,7 @@
                 sidebar.classList.remove('show');
             }
         });
+
         // Handle all dropdowns (including nested ones)
         const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
