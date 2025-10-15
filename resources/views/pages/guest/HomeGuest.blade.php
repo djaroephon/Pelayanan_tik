@@ -201,54 +201,14 @@
 
             <div class="service-card animate-item">
                 <div class="service-icon">
-                    <i class="bi bi-hdd-network"></i>
-                </div>
-                <h4>Layanan Colocation</h4>
-                <p>Permohonan Colocation/Penitipan Server</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-         <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-shield-check"></i>
-                </div>
-                <h4>Layanan VPN</h4>
-                <p>Permohonan VPN</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-            <div class="service-card animate-item">
-                <div class="service-icon">
                     <i class="bi bi-hdd-rack"></i>
                 </div>
-                <h4>Layanan VPS</h4>
-                <p>Permohonan VPS</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-            <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-envelope-at"></i>
-                </div>
-                <h4>Layanan Email</h4>
-                <p>Permohonan Email</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-            <div class="service-card animate-item">
-                <div class="service-icon">
-                    <i class="bi bi-globe2"></i>
-                </div>
-                <h4>Layanan Jaringan </h4>
-                <p>Permohonan Jaringan Internet/Metro</p>
-                <a href="#" target="_blank" class="btn btn-outline-primary mt-3">Unduh</a>
-            </div>
-
-
+                <h4>Layanan Relocation</h4>
+                <p>Permohonan Relocation</p>
+<button type="button" class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#relokasiModal">
+        Ajukan Relokasi
+    </button>
         </div>
-
-
-
-
         <!-- Stats Section -->
         <h2 class="mb-4 mt-5 animate-item">Statistik Laporan Saya</h2>
         <div class="row">
@@ -301,8 +261,121 @@
         </footer>
     </div>
 
+<div class="modal fade" id="relokasiModal" tabindex="-1" aria-labelledby="relokasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="relokasiModalLabel">Formulir Relokasi Layanan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('relokasi.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <!-- Data Pemohon -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nama_pemohon" class="form-label">Nama Pemohon</label>
+                                <input type="text" class="form-control" id="nama_pemohon" name="nama_pemohon" value="{{ Auth::guard('guest')->user()->nama_pelapor }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nip" class="form-label">NIP</label>
+                                <input type="text" class="form-control" id="nip" name="nip" value="{{ Auth::guard('guest')->user()->nip }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instansi" class="form-label">Instansi</label>
+                        <input type="text" class="form-control" id="instansi" name="instansi" value="{{ Auth::guard('guest')->user()->instansi }}" required>
+                    </div>
+
+                    <!-- Jenis Relokasi -->
+                    <div class="mb-3">
+                        <label for="jenis_relokasi" class="form-label">Jenis Relokasi</label>
+                        <select class="form-select" id="jenis_relokasi" name="jenis_relokasi" required>
+                            <option value="">Pilih Jenis Relokasi</option>
+                            <option value="jaringan">Jaringan</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Jika memilih jaringan, tampilkan field ini -->
+                    <div id="jaringan_fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="nama_alat_jaringan" class="form-label">Nama Alat Jaringan</label>
+                            <input type="text" class="form-control" id="nama_alat_jaringan" name="nama_alat_jaringan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ip_address" class="form-label">IP Address</label>
+                            <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="Contoh: 192.168.1.1">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" placeholder="Keterangan tambahan mengenai relokasi"></textarea>
+                    </div>
+
+                    <!-- Lokasi Awal -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Lokasi Awal</h6>
+                            <div class="mb-3">
+                                <label for="instansi_awal" class="form-label">Nama Tempat/Instansi Awal</label>
+                                <input type="text" class="form-control" id="instansi_awal" name="instansi_awal" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="koordinat_awal" class="form-label">Koordinat Lokasi Awal</label>
+                                <input type="text" class="form-control" id="koordinat_awal" name="koordinat_awal" placeholder="Contoh: -6.2088, 106.8456" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Lokasi Tujuan</h6>
+                            <div class="mb-3">
+                                <label for="instansi_tujuan" class="form-label">Nama Tempat/Instansi Tujuan</label>
+                                <input type="text" class="form-control" id="instansi_tujuan" name="instansi_tujuan" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="koordinat_tujuan" class="form-label">Koordinat Lokasi Tujuan</label>
+                                <input type="text" class="form-control" id="koordinat_tujuan" name="koordinat_tujuan" placeholder="Contoh: -6.2088, 106.8456" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="surat_bukti_izin_relokasi" class="form-label">Upload Surat Bukti Izin Relokasi (PDF)</label>
+                        <input type="file" class="form-control" id="surat_bukti_izin_relokasi" name="surat_bukti_izin_relokasi" accept=".pdf" required>
+                        <div class="form-text">Maksimal ukuran file: 2MB</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Ajukan Relokasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
+        document.getElementById('jenis_relokasi').addEventListener('change', function() {
+    var jaringanFields = document.getElementById('jaringan_fields');
+    if (this.value === 'jaringan') {
+        jaringanFields.style.display = 'block';
+        // Set required untuk field jaringan
+        document.getElementById('nama_alat_jaringan').setAttribute('required', 'required');
+        document.getElementById('ip_address').setAttribute('required', 'required');
+    } else {
+        jaringanFields.style.display = 'none';
+        // Hapus required
+        document.getElementById('nama_alat_jaringan').removeAttribute('required');
+        document.getElementById('ip_address').removeAttribute('required');
+    }
+});
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
             const sidebarToggle = document.getElementById('sidebarToggle');
