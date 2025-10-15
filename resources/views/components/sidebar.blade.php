@@ -277,7 +277,7 @@
         }
     }
 </style>
-
+<body>
 <!-- Sidebar Toggle Button (Mobile Only) -->
 <button class="sidebar-toggle d-lg-none">
     <i class="fas fa-bars"></i>
@@ -336,11 +336,6 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('penjab.index') }}">
-                <i class="fas fa-user-tie"></i>Penjab
-            </a>
-        </li>
-        <li>
             <a href="{{ route('admin.users.index') }}">
                 <i class="fas fa-user-circle"></i>Account
             </a>
@@ -364,31 +359,6 @@
         </form>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.querySelector('.sidebar');
-        const sidebarToggle = document.querySelector('.sidebar-toggle');
-
-        // Toggle sidebar on mobile
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('show');
-            });
-        }
-
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            if (window.innerWidth < 992 &&
-                !sidebar.contains(event.target) &&
-                !sidebarToggle.contains(event.target) &&
-                sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-            }
-        }
-    </style>
-
-<body>
     <!-- Sidebar Toggle Button (Mobile Only) -->
     <button class="sidebar-toggle d-lg-none">
         <i class="fas fa-bars"></i>
@@ -426,11 +396,7 @@
         <i class="fas fa-map-marker-alt"></i>Wilayah
     </a>
 </li>
-            {{-- <li>
-                <a href="{{ route('penjab.index') }}">
-                    <i class="fas fa-user-tie"></i>Penjab
-                </a>
-            </li> --}}
+
             <li>
                 <a href="{{ route('admin.users.index') }}">
                     <i class="fas fa-user-circle"></i>Account
@@ -455,7 +421,27 @@
             </form>
         </div>
     </div>
+<script>
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+
+        // Toggle sidebar on mobile
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 992 &&
+                !sidebar.contains(event.target) &&
+                !sidebarToggle.contains(event.target) &&
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
         // Handle all dropdowns (including nested ones)
         const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
