@@ -306,7 +306,11 @@
                 </li>
             </ul>
         </li>
-
+         <li>
+    <a href="{{ route('wilayah.index') }}">
+        <i class="fas fa-map-marker-alt"></i>Wilayah
+    </a>
+</li>
         <li>
             <a href="{{ route('teknisiAdmin.index') }}">
                 <i class="fas fa-users-cog"></i>Teknisi
