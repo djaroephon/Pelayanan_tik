@@ -25,4 +25,20 @@ class Teknisi extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public function getActiveLaporansCountAttribute()
+    {
+        return $this->laporans()->where('status', 'on progress')->count();
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return $this->active_laporans_count > 0;
+    }
+
+     public function wilayahs()
+    {
+        return $this->belongsToMany(WilayahTeknisi::class, 'teknisi_wilayah', 'teknisi_id', 'wilayah_teknisi_id');
+    }
 }

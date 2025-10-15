@@ -16,6 +16,7 @@ class Guest extends Authenticatable
         'nik',
         'nip',
         'instansi',
+        'no_hp',
         'surat_pernyataan_pengelola',
         'ktp',
         'password',

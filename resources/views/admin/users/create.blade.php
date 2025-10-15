@@ -129,8 +129,8 @@
             background: linear-gradient(120deg, #5a6268, #495057);
         }
 
-        /* Technician Fields */
-        .technician-fields {
+        /* Role-specific Fields */
+        .role-fields {
             display: none;
             margin-top: 20px;
             padding: 20px;
@@ -138,17 +138,33 @@
             background: linear-gradient(120deg, #f8f9fc, #e9ecef);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             border-left: 4px solid #4361ee;
+            animation: fadeIn 0.3s ease;
         }
 
-        .technician-header {
-            color: #4361ee;
+        .technician-fields {
+            border-left-color: #198754;
+        }
+
+        .penjab-fields {
+            border-left-color: #ffc107;
+        }
+
+        .role-header {
             font-weight: 600;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
         }
 
-        .technician-header i {
+        .technician-header {
+            color: #198754;
+        }
+
+        .penjab-header {
+            color: #ffc107;
+        }
+
+        .role-header i {
             margin-right: 0.75rem;
             font-size: 1.2rem;
         }
@@ -160,6 +176,12 @@
             box-shadow: var(--card-shadow);
             padding: 1rem 1.5rem;
             margin-bottom: 1.5rem;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive Adjustments */
@@ -179,6 +201,18 @@
             .form-section {
                 padding: 1rem;
             }
+        }
+
+        .layanan-item {
+            margin-bottom: 10px;
+        }
+
+        .btn-tambah-layanan, .btn-hapus-layanan {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .layanan-item:first-child .btn-hapus-layanan {
+            display: none;
         }
     </style>
 </head>
@@ -265,6 +299,7 @@
                                                 <option value="">Pilih Role</option>
                                                 <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                                 <option value="operator" {{ old('role') == 'operator' ? 'selected' : '' }}>Operator</option>
+                                                <option value="penjab" {{ old('role') == 'penjab' ? 'selected' : '' }}>Penjab</option>
                                                 <option value="teknisi" {{ old('role') == 'teknisi' ? 'selected' : '' }}>Teknisi</option>
                                             </select>
                                         </div>
@@ -272,8 +307,9 @@
                                 </div>
                             </div>
 
-                            <div class="technician-fields" id="technicianFields">
-                                <h5 class="technician-header"><i class="fas fa-tools"></i>Data Teknisi</h5>
+                            <!-- Technician Fields -->
+                            <div class="role-fields technician-fields" id="technicianFields">
+                                <h5 class="role-header technician-header"><i class="fas fa-tools"></i>Data Teknisi</h5>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="no_hp_teknisi" class="form-label">Nomor HP</label>
@@ -281,6 +317,26 @@
                                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                             <input type="text" class="form-control" id="no_hp_teknisi" name="no_hp_teknisi" value="{{ old('no_hp_teknisi') }}" placeholder="Masukkan nomor HP teknisi">
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Penjab Fields -->
+                            <div class="role-fields penjab-fields" id="penjabFields">
+                                <h5 class="role-header penjab-header"><i class="fas fa-user-tie"></i>Data Penjab Layanan</h5>
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Layanan yang Dikelola</label>
+                                        <div id="layanan-container">
+                                            <div class="input-group mb-2 layanan-item">
+                                                <input type="text" class="form-control" name="nama_penjab_layanan[]"
+                                                       placeholder="Masukkan nama layanan (contoh: Keamanan Jaringan)" required>
+                                                <button type="button" class="btn btn-success btn-tambah-layanan">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Klik tombol + untuk menambah layanan lainnya</small>
                                     </div>
                                 </div>
                             </div>
@@ -305,23 +361,62 @@
         document.addEventListener('DOMContentLoaded', function() {
             const roleSelect = document.getElementById('role');
             const technicianFields = document.getElementById('technicianFields');
+            const penjabFields = document.getElementById('penjabFields');
+            const layananContainer = document.getElementById('layanan-container');
 
-            // Show/hide technician fields based on role selection
-            roleSelect.addEventListener('change', function() {
-                if (this.value === 'teknisi') {
+            // Function to show/hide fields based on role
+            function toggleRoleFields() {
+                // Hide all fields first
+                technicianFields.style.display = 'none';
+                penjabFields.style.display = 'none';
+
+                // Remove required attributes
+                document.getElementById('no_hp_teknisi')?.removeAttribute('required');
+
+                // Remove required from all layanan inputs
+                const layananInputs = document.querySelectorAll('input[name="nama_penjab_layanan[]"]');
+                layananInputs.forEach(input => input.removeAttribute('required'));
+
+                // Show specific fields based on role
+                if (roleSelect.value === 'teknisi') {
                     technicianFields.style.display = 'block';
                     document.getElementById('no_hp_teknisi').setAttribute('required', '');
-                } else {
-                    technicianFields.style.display = 'none';
-                    document.getElementById('no_hp_teknisi').removeAttribute('required');
+                } else if (roleSelect.value === 'penjab') {
+                    penjabFields.style.display = 'block';
+                    // Set required for all layanan inputs
+                    const layananInputs = document.querySelectorAll('input[name="nama_penjab_layanan[]"]');
+                    layananInputs.forEach(input => input.setAttribute('required', ''));
                 }
+            }
+
+            // Show/hide fields based on role selection
+            roleSelect.addEventListener('change', toggleRoleFields);
+
+            // Show fields if there was a validation error
+            if (roleSelect.value === 'teknisi' || roleSelect.value === 'penjab') {
+                toggleRoleFields();
+            }
+
+            // Add new layanan field
+            document.querySelector('.btn-tambah-layanan').addEventListener('click', function() {
+                const newItem = document.createElement('div');
+                newItem.className = 'input-group mb-2 layanan-item';
+                newItem.innerHTML = `
+                    <input type="text" class="form-control" name="nama_penjab_layanan[]"
+                           placeholder="Masukkan nama layanan">
+                    <button type="button" class="btn btn-danger btn-hapus-layanan">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                layananContainer.appendChild(newItem);
             });
 
-            // Show technician fields if there was a validation error
-            if (roleSelect.value === 'teknisi') {
-                technicianFields.style.display = 'block';
-                document.getElementById('no_hp_teknisi').setAttribute('required', '');
-            }
+            // Remove layanan field
+            layananContainer.addEventListener('click', function(e) {
+                if (e.target.closest('.btn-hapus-layanan')) {
+                    e.target.closest('.layanan-item').remove();
+                }
+            });
 
             // Add animation to form elements
             const formElements = document.querySelectorAll('.form-control, .form-select');
@@ -334,6 +429,14 @@
                     element.style.transform = 'translateY(0)';
                 }, index * 100);
             });
+
+            // Phone number validation for technician
+            const noHpTeknisi = document.getElementById('no_hp_teknisi');
+            if (noHpTeknisi) {
+                noHpTeknisi.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9+]/g, '');
+                });
+            }
         });
     </script>
 </body>

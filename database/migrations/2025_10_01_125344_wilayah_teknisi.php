@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penjab_layanan', function (Blueprint $table) {
+        Schema::create('wilayah_teknisi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('penjab_id')->constrained('users')->onDelete('cascade');
-            $table->string('nama_penjab_layanan', 100);
-            $table->text('deskripsi')->nullable();
+            $table->string('nama_wilayah');
+            $table->string('ip_address')->unique();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('penjab_layanan');
+     Schema::dropIfExists('wilayah_teknisi');
     }
 };
