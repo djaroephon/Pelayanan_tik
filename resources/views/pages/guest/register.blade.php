@@ -483,19 +483,20 @@
                 </div>
             </div>
 
-                    <div class="mb-4">
-                        <label for="instansi" class="form-label">Instansi<span class="required">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="fas fa-building text-secondary"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0 @error('instansi') is-invalid @enderror" id="instansi" name="instansi"
-                                placeholder="Masukkan nama instansi" required value="{{ old('instansi') }}">
-                        </div>
-                        @error('instansi')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    <div class="form-group">
+    <label for="instansi">Instansi</label>
+    <select name="instansi" id="instansi" class="form-control @error('instansi') is-invalid @enderror" required>
+        <option value="">Pilih Instansi</option>
+        @foreach($skpas as $skpa)
+            <option value="{{ $skpa['nama_skpa'] }}" {{ old('instansi') == $skpa['nama_skpa'] ? 'selected' : '' }}>
+                {{ $skpa['nama_skpa'] }}
+            </option>
+        @endforeach
+    </select>
+    @error('instansi')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
                     <div class="nav-buttons">
                         <div></div> <!-- Untuk spacing  -->

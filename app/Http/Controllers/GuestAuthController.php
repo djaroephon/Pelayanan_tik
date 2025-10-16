@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class GuestAuthController extends Controller
 {
@@ -91,9 +92,31 @@ class GuestAuthController extends Controller
         ])->onlyInput('nik');
     }
 
-    public function showRegistrationForm()
+     public function showRegistrationForm()
     {
-        return view('pages.guest.register');
+        try {
+            $apiResponse = Http::withHeaders([
+                'X-API-Key' => env('API_KEY'),
+                'Accept' => 'application/json',
+            ])->get('http://123.108.103.129:8080/api/skpa');
+
+            $skpas = [];
+
+            if ($apiResponse->successful()) {
+                $data = $apiResponse->json();
+                if ($data['status'] && isset($data['SKPA'])) {
+                    $skpas = $data['SKPA'];
+                }
+            } else {
+                Log::error('Gagal mengambil data SKPA: ' . $apiResponse->body());
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error mengambil data SKPA: ' . $e->getMessage());
+            $skpas = [];
+        }
+
+        return view('pages.guest.register', compact('skpas'));
     }
 
     public function register(Request $request)
@@ -151,7 +174,6 @@ class GuestAuthController extends Controller
 
             return back()->with('error', 'Gagal menyimpan data: '.$e->getMessage())->withInput();
         }
-
     }
 
     public function logout(Request $request)
