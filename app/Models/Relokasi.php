@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Relokasi extends Model
 {
     use HasFactory;
+
     protected $table = 'relokasi';
 
-   protected $fillable = [
+    protected $fillable = [
         'guest_id',
         'nama_pemohon',
         'nip',

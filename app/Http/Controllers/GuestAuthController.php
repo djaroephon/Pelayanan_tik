@@ -6,9 +6,9 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Http;
 
 class GuestAuthController extends Controller
 {
@@ -92,7 +92,7 @@ class GuestAuthController extends Controller
         ])->onlyInput('nik');
     }
 
-     public function showRegistrationForm()
+    public function showRegistrationForm()
     {
         try {
             $apiResponse = Http::withHeaders([
@@ -108,11 +108,11 @@ class GuestAuthController extends Controller
                     $skpas = $data['SKPA'];
                 }
             } else {
-                Log::error('Gagal mengambil data SKPA: ' . $apiResponse->body());
+                Log::error('Gagal mengambil data SKPA: '.$apiResponse->body());
             }
 
         } catch (\Exception $e) {
-            Log::error('Error mengambil data SKPA: ' . $e->getMessage());
+            Log::error('Error mengambil data SKPA: '.$e->getMessage());
             $skpas = [];
         }
 

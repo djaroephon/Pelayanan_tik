@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('teknisi_wilayah', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teknisi_id')->constrained('teknisi')->onDelete('cascade');//untuk Ambek Teknisi
-            $table->foreignId('guest_id')->constrained('guests')->onDelete('cascade');//untuk ambek instansi sama Pic(Nama Guest)
-            $table->foreignId('wilayah_teknisi_id')->constrained('wilayah_teknisi')->onDelete('cascade');//untuk isi Ip adress
+            $table->foreignId('teknisi_id')->constrained('teknisi')->onDelete('cascade');
+            $table->foreignId('wilayah_teknisi_id')->constrained('wilayah_teknisi')->onDelete('cascade');
             $table->timestamps();
         });
     }

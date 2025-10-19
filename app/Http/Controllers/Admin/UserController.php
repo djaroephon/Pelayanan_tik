@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PenjabLayanan;
 use App\Models\Teknisi;
 use App\Models\User;
-use App\Models\PenjabLayanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -74,7 +74,7 @@ class UserController extends Controller
         elseif ($validatedData['role'] === 'penjab') {
             if ($request->has('nama_penjab_layanan')) {
                 foreach ($request->nama_penjab_layanan as $namaLayanan) {
-                    if (!empty(trim($namaLayanan))) {
+                    if (! empty(trim($namaLayanan))) {
                         PenjabLayanan::create([
                             'penjab_id' => $user->id,
                             'nama_penjab_layanan' => trim($namaLayanan),
@@ -186,11 +186,11 @@ class UserController extends Controller
 
             // Update atau create layanan
             foreach ($namaLayanans as $namaLayanan) {
-                if (!empty(trim($namaLayanan))) {
+                if (! empty(trim($namaLayanan))) {
                     $layanan = PenjabLayanan::updateOrCreate(
                         [
                             'penjab_id' => $user->id,
-                            'nama_penjab_layanan' => trim($namaLayanan)
+                            'nama_penjab_layanan' => trim($namaLayanan),
                         ]
                     );
                     $existingLayananIds[] = $layanan->id;
@@ -199,8 +199,8 @@ class UserController extends Controller
 
             // Hapus layanan yang tidak ada dalam list baru
             PenjabLayanan::where('penjab_id', $user->id)
-                        ->whereNotIn('id', $existingLayananIds)
-                        ->delete();
+                ->whereNotIn('id', $existingLayananIds)
+                ->delete();
 
         } elseif ($user->penjabLayanans()->exists()) {
             // Hapus semua layanan jika role bukan penjab

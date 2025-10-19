@@ -5,20 +5,18 @@ use App\Http\Controllers\admin\GuestAdminController;
 use App\Http\Controllers\Admin\kategoriController;
 use App\Http\Controllers\Admin\LaporanAdminController;
 use App\Http\Controllers\Admin\PenjabController;
+use App\Http\Controllers\Admin\RelokasiAdminController;
 use App\Http\Controllers\Admin\TeknisiController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WilayahController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Export\ExportController;
 use App\Http\Controllers\GuestAuthController;
 use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\Penjab\PenjabUserController;
-use App\Http\Controllers\Admin\WilayahController;
-use App\Http\Controllers\Teknisi\TeknisiLaporController;
 use App\Http\Controllers\RelokasiController;
-use App\Http\Controllers\Admin\RelokasiAdminController;
+use App\Http\Controllers\Teknisi\TeknisiLaporController;
 use App\Http\Middleware\CheckRole;
 use App\Models\Guest;
-use App\Models\PenjabLayanan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +26,7 @@ Route::middleware(['auth:guest'])->group(function () {
     Route::post('/lapor', [LaporanController::class, 'SubmitForm'])->name('lapor.submit');
     Route::get('/laporan-saya', [GuestAuthController::class, 'laporanSaya'])->name('guest.laporan.saya');
 
-     Route::get('/relokasi/create', [RelokasiController::class, 'create'])->name('relokasi.create');
+    Route::get('/relokasi/create', [RelokasiController::class, 'create'])->name('relokasi.create');
     Route::post('/relokasi', [RelokasiController::class, 'store'])->name('relokasi.store');
     Route::get('/relokasi', [RelokasiController::class, 'index'])->name('relokasi.index');
 });
@@ -58,7 +56,7 @@ Route::middleware(['auth', CheckRole::class.':admin,operator'])->group(function 
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
     Route::get('/wilayah', [WilayahController::class, 'index'])->name('wilayah.index');
-    Route::get('/wilayah/create', [WilayahController::class, 'create'])->name('wilayah.create');
+    // Route::get('/wilayah/create', [WilayahController::class, 'create'])->name('wilayah.create');
     Route::post('/wilayah', [WilayahController::class, 'store'])->name('wilayah.store');
     Route::get('/wilayah/{id}/edit', [WilayahController::class, 'edit'])->name('wilayah.edit');
     Route::put('/wilayah/{id}', [WilayahController::class, 'update'])->name('wilayah.update');
@@ -108,7 +106,7 @@ Route::middleware(['auth', CheckRole::class.':teknisi'])->name('teknisi.')->pref
 });
 
 Route::middleware(['auth', CheckRole::class.':penjab'])->group(function () {
- Route::get('/penjab/dashboard', [PenjabController::class, 'index'])->name('penjab.dashboard');
+    Route::get('/penjab/dashboard', [PenjabController::class, 'index'])->name('penjab.dashboard');
     Route::get('/penjab/layanan/{id}/teknisis', [PenjabController::class, 'layananTeknisis'])->name('penjab.layanan.teknisis');
     Route::get('/penjab/layanan/{id}/laporans', [PenjabController::class, 'layananLaporans'])->name('penjab.layanan.laporans');
     Route::get('/penjab/laporan', [PenjabController::class, 'laporan'])->name('penjab.laporan');

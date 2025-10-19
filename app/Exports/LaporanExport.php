@@ -29,7 +29,7 @@ class LaporanExport implements FromCollection, ShouldAutoSize, WithHeadings, Wit
         $penjabLayanan = '-';
         if ($row->penyelesaian?->penjabLayanan) {
             $namaPenjab = $row->penyelesaian->penjabLayanan->penjab->name ?? 'nama';
-            $penjabLayanan = $namaPenjab . ' - ' . $row->penyelesaian->penjabLayanan->nama_penjab_layanan;
+            $penjabLayanan = $namaPenjab.' - '.$row->penyelesaian->penjabLayanan->nama_penjab_layanan;
         }
 
         return [

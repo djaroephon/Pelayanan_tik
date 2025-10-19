@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\PenjabLayanan;
 use App\Models\Relokasi;
 use App\Models\Teknisi;
-use App\Models\PenjabLayanan;
+use Illuminate\Http\Request;
 
 class RelokasiAdminController extends Controller
 {
     public function index()
     {
         $relokasis = Relokasi::with(['guest', 'teknisi', 'penjab'])->latest()->get();
+
         return view('admin.relokasi.index', compact('relokasis'));
     }
 
@@ -21,6 +22,7 @@ class RelokasiAdminController extends Controller
         $teknisis = Teknisi::all();
         $penjabs = PenjabLayanan::all();
         $statuses = ['pending', 'on progress', 'complete'];
+
         return view('admin.relokasi.edit', compact('relokasi', 'teknisis', 'penjabs', 'statuses'));
     }
 
@@ -45,7 +47,7 @@ class RelokasiAdminController extends Controller
     {
         // Hapus file surat jika ada
         if ($relokasi->surat_bukti_izin_relokasi) {
-            \Storage::delete('public/relokasi/' . $relokasi->surat_bukti_izin_relokasi);
+            \Storage::delete('public/relokasi/'.$relokasi->surat_bukti_izin_relokasi);
         }
 
         $relokasi->delete();

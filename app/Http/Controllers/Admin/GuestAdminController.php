@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Models\WilayahTeknisi;
 
 class GuestAdminController extends Controller
 {
@@ -22,6 +23,13 @@ class GuestAdminController extends Controller
         $guest = Guest::findOrFail($id);
         $guest->status = 'approved';
         $guest->save();
+
+        WilayahTeknisi::create([
+            'nama_wilayah' => $guest->instansi,
+            'nama_pic' => $guest->nama_pelapor,
+            'ip_address' => null,
+            'guest_id' => $guest->id,
+        ]);
 
         return redirect()->route('admin.guests.index')
             ->with('success', 'Akun '.$guest->nama_pelapor.' telah disetujui');
