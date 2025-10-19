@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
 
     public function penjabLayanans()
-{
-    return $this->hasMany(PenjabLayanan::class, 'penjab_id');
-}
+    {
+        return $this->hasMany(PenjabLayanan::class, 'penjab_id');
+    }
 }
