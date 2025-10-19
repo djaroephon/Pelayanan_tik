@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Relokasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Relokasi;
 
 class RelokasiController extends Controller
 {
-      public function create()
+    public function create()
     {
         // Mengambil data guest yang sedang login
         $guest = Auth::guard('guest')->user();
+
         return view('guest.relokasi.create', compact('guest'));
     }
 
@@ -33,7 +34,7 @@ class RelokasiController extends Controller
         ]);
 
         $file = $request->file('surat_bukti_izin_relokasi');
-        $filename = time() . '_' . $file->getClientOriginalName();
+        $filename = time().'_'.$file->getClientOriginalName();
         $file->storeAs('public/relokasi', $filename);
 
         Relokasi::create([
@@ -59,8 +60,9 @@ class RelokasiController extends Controller
     public function index()
     {
         $relokasis = Relokasi::where('guest_id', Auth::guard('guest')->id())
-                            ->latest()
-                            ->get();
+            ->latest()
+            ->get();
+
         return view('guest.relokasi.index', compact('relokasis'));
     }
 }
