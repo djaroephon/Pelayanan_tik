@@ -51,25 +51,28 @@
                 <form action="{{ route('wilayah.update', $wilayah->id) }}" method="POST">
                     @csrf
                     @method('PUT')
+
+                    <!-- Display guest info (readonly) -->
                     <div class="mb-3">
-                        <label for="nama_wilayah" class="form-label">Nama Wilayah <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('nama_wilayah') is-invalid @enderror"
-                               id="nama_wilayah" name="nama_wilayah"
-                               value="{{ old('nama_wilayah', $wilayah->nama_wilayah) }}"
-                               placeholder="Contoh: Dishub, Disbudpar, dll." required>
-                        @error('nama_wilayah')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <label class="form-label">Nama Wilayah (Instansi)</label>
+                        <input type="text" class="form-control" value="{{ $wilayah->nama_wilayah }}" readonly>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nama PIC</label>
+                        <input type="text" class="form-control" value="{{ $wilayah->nama_pic }}" readonly>
+                    </div>
+
                     <div class="mb-3">
                         <label for="ip_address" class="form-label">IP Address <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('ip_address') is-invalid @enderror"
                                id="ip_address" name="ip_address"
                                value="{{ old('ip_address', $wilayah->ip_address) }}"
-                               placeholder="Contoh: 123.108.98.1" required>
+                               placeholder="Contoh: 192.168.1.1, 192.168.1.2, 192.168.1.3" required>
                         @error('ip_address')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <small class="form-text text-muted">Bisa multiple IP, pisahkan dengan koma</small>
                     </div>
 
                     <div class="mb-3">

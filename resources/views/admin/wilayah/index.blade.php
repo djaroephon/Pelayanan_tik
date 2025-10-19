@@ -67,9 +67,7 @@
         <div class="card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold m-0"><i class="fas fa-map-marker-alt me-2"></i>Daftar Wilayah</h5>
-                <a href="{{ route('wilayah.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Tambah Wilayah
-                </a>
+
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -78,6 +76,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nama Wilayah</th>
+                                <th>Nama PIC</th>
                                 <th>IP Address</th>
                                 <th>Teknisi</th>
                                 <th>Aksi</th>
@@ -92,8 +91,15 @@
                                             {{ $wilayah->nama_wilayah }}
                                         </span>
                                     </td>
-                                    <td >
-                                        <span class="badge bg-info">{{ $wilayah->ip_address }}</span>
+                                    <td>{{ $wilayah->nama_pic }}</td>
+                                    <td>
+                                        @if($wilayah->ip_address)
+                                            @foreach($wilayah->ip_addresses as $ip)
+                                                <span class="badge bg-info mb-1">{{ trim($ip) }}</span><br>
+                                            @endforeach
+                                        @else
+                                            <span class="text-muted">Belum diisi</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @foreach($wilayah->teknisis as $teknisi)
@@ -121,10 +127,9 @@
                             @endforeach
                             @if($wilayahs->isEmpty())
                                 <tr>
-                                    <td colspan="5" class="text-center py-4">
+                                    <td colspan="6" class="text-center py-4">
                                         <i class="fas fa-map-marker-alt fa-2x mb-3 text-muted"></i>
                                         <p class="text-muted">Belum ada data wilayah</p>
-                                        <a href="{{ route('wilayah.create') }}" class="btn btn-primary">Tambah Wilayah Pertama</a>
                                     </td>
                                 </tr>
                             @endif
