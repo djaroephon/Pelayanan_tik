@@ -3,55 +3,34 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\WilayahTeknisi;
+use App\Models\Guest;
 use App\Models\Teknisi;
+use App\Models\WilayahTeknisi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class WilayahController extends Controller
 {
     public function index()
     {
-        $wilayahs = WilayahTeknisi::with('teknisis')->get();
+        $wilayahs = WilayahTeknisi::with(['teknisis', 'guest'])->get();
+
         return view('admin.wilayah.index', compact('wilayahs'));
     }
 
     public function create()
     {
         $teknisis = Teknisi::all();
-        return view('admin.wilayah.create', compact('teknisis'));
-    }
+        $guests = Guest::where('status', 'approved')->get();
 
-    public function store(Request $request)
-    {
-        if (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator') {
-            abort(403, 'Unauthorized action.');
-        }
-
-        $request->validate([
-            'nama_wilayah' => 'required|string|max:255',
-            'ip_address' => 'required|ip|unique:wilayah_teknisi,ip_address',
-            'teknisi_ids' => 'array',
-            'teknisi_ids.*' => 'exists:teknisi,id',
-        ]);
-
-        $wilayah = WilayahTeknisi::create([
-            'nama_wilayah' => $request->nama_wilayah,
-            'ip_address' => $request->ip_address,
-        ]);
-
-        if ($request->has('teknisi_ids')) {
-            $wilayah->teknisis()->attach($request->teknisi_ids);
-        }
-
-        return redirect()->route('wilayah.index')
-            ->with('success', 'Wilayah berhasil ditambahkan');
+        return view('admin.wilayah.create', compact('teknisis', 'guests'));
     }
 
     public function edit($id)
     {
         $wilayah = WilayahTeknisi::with('teknisis')->findOrFail($id);
         $teknisis = Teknisi::all();
+
         return view('admin.wilayah.edit', compact('wilayah', 'teknisis'));
     }
 
@@ -62,15 +41,14 @@ class WilayahController extends Controller
         }
 
         $request->validate([
-            'nama_wilayah' => 'required|string|max:255',
-            'ip_address' => 'required|ip|unique:wilayah_teknisi,ip_address',
+            'ip_address' => 'required|string|max:255',
             'teknisi_ids' => 'array',
             'teknisi_ids.*' => 'exists:teknisi,id',
+
         ]);
 
         $wilayah = WilayahTeknisi::findOrFail($id);
         $wilayah->update([
-            'nama_wilayah' => $request->nama_wilayah,
             'ip_address' => $request->ip_address,
         ]);
 
@@ -82,7 +60,7 @@ class WilayahController extends Controller
 
     public function destroy($id)
     {
-         if (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator') {
+        if (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -94,4 +72,3 @@ class WilayahController extends Controller
             ->with('success', 'Wilayah berhasil dihapus');
     }
 }
-
