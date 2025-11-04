@@ -10,7 +10,6 @@ class wilayahTeknisi extends Model
 
     protected $fillable = ['nama_wilayah', 'nama_pic', 'ip_address', 'guest_id'];
 
-    // Tambahkan appends untuk accessor
     protected $appends = ['ip_addresses'];
 
     public function guest()

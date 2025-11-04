@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Relokasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RelokasiController extends Controller
 {
     public function create()
     {
-        // Mengambil data guest yang sedang login
         $guest = Auth::guard('guest')->user();
 
         return view('guest.relokasi.create', compact('guest'));
@@ -20,7 +20,7 @@ class RelokasiController extends Controller
     {
         $request->validate([
             'nama_pemohon' => 'required|string|max:100',
-            'nip' => 'required|string|max:20',
+            'nip' => 'required|string|max:18',
             'instansi' => 'required|string|max:100',
             'jenis_relokasi' => 'required|in:jaringan,lainnya',
             'nama_alat_jaringan' => 'required_if:jenis_relokasi,jaringan|string|max:100',
@@ -33,9 +33,12 @@ class RelokasiController extends Controller
             'surat_bukti_izin_relokasi' => 'required|file|mimes:pdf|max:2048',
         ]);
 
+        if (!Storage::disk('public')->exists('relokasi')) {
+            Storage::disk('public')->makeDirectory('relokasi');
+        }
         $file = $request->file('surat_bukti_izin_relokasi');
         $filename = time().'_'.$file->getClientOriginalName();
-        $file->storeAs('public/relokasi', $filename);
+        $file->storeAs('relokasi', $filename, 'public');
 
         Relokasi::create([
             'guest_id' => Auth::guard('guest')->id(),

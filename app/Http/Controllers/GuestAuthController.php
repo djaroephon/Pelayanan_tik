@@ -123,12 +123,12 @@ class GuestAuthController extends Controller
     {
         $request->validate([
             'nama_pelapor' => 'required|string|max:100',
-            'nik' => 'required|string|unique:guest,nik|max:20',
-            'nip' => 'required|string|unique:guest,nip|max:20',
-            'no_hp' => 'required|string|unique:guest,no_hp|max:20',
+            'nik' => 'required|string|unique:guest,nik|max:16',
+            'nip' => 'required|string|unique:guest,nip|max:18',
+            'no_hp' => 'required|string|unique:guest,no_hp|max:13',
             'instansi' => 'required|string|max:100',
-            'surat_pernyataan_pengelola' => 'required|file|mimes:pdf|max:2048',
-            'ktp' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'surat_pernyataan_pengelola' => 'required|file|mimes:pdf|max:3048',
+            'ktp' => 'required|file|mimes:jpg,jpeg,png|max:3048',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
