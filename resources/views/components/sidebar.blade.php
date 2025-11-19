@@ -263,7 +263,7 @@
 <!-- Sidebar -->
 <div class="sidebar">
     <div class="sidebar-header">
-        <h4><i class="fas fa-user-shield me-2"></i>Admin Panel</h4>
+        <h4><i class="fas fa-user-shield me-2"></i>{{ auth()->user()->name}} Panel</h4>
     </div>
 
     <ul class="sidebar-nav">

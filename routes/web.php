@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\admin\GuestAdminController;
+use App\Http\Controllers\Admin\GuestAdminController;
 use App\Http\Controllers\Admin\kategoriController;
 use App\Http\Controllers\Admin\LaporanAdminController;
 use App\Http\Controllers\Admin\PenjabController;
