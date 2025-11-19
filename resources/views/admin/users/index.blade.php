@@ -288,8 +288,8 @@
                     <div class="page-header">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div>
-                                <h1 class="h2 mb-1"><i class="fas fa-users me-2"></i>Kelola Akun Pengguna</h1>
-                                <p class="mb-0 opacity-75">Kelola akses pengguna ke dalam sistem</p>
+                                <h1 class="h2 mb-1"><i class="fas fa-users me-2"></i>Kelola Akun Petugas</h1>
+                                <p class="mb-0 opacity-75">Kelola akses petugas ke dalam sistem</p>
                             </div>
                             <div class="search-box mt-2 mt-md-0">
                                 <div class="input-group" style="max-width: 300px;">
@@ -315,11 +315,11 @@
                     @if(auth()->user()->role === 'admin')
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-                            <i class="fas fa-user-plus me-2"></i> Tambah Pengguna Baru
+                            <i class="fas fa-user-plus me-2"></i> Tambah petugas Baru
                         </a>
                         <div class="text-muted">
                             <i class="fas fa-info-circle me-1"></i>
-                            Total: {{ $users->count() }} Pengguna
+                            Total: {{ $users->count() }} Petugas
                         </div>
                     </div>
                     @endif
@@ -327,7 +327,7 @@
                     <!-- Users Table -->
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Daftar Pengguna</h5>
+                            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Daftar Petugas</h5>
                             <div class="d-flex align-items-center">
                                 <span class="badge bg-primary me-2">{{ $users->where('role', 'admin')->count() }} Admin</span>
                                 <span class="badge bg-warning me-2">{{ $users->where('role', 'operator')->count() }} Operator</span>

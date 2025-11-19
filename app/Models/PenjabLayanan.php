@@ -8,12 +8,40 @@ class PenjabLayanan extends Model
 {
     protected $table = 'penjab_layanan';
 
-    protected $fillable = ['nama_penjab_layanan'];
+    protected $fillable = ['penjab_id','nama_penjab_layanan'];
+
+        public function penjab()
+    {
+        return $this->belongsTo(User::class, 'penjab_id');
+    }
 
     public function penyelesaians()
     {
         return $this->hasMany(Penyelesaian::class);
     }
 
+ public function laporans()
+    {
+        return $this->hasManyThrough(
+            Laporan::class,
+            Penyelesaian::class,
+            'penjab_layanan_id',
+            'id',
+            'id',
+            'laporan_id'
+        );
+    }
 
+
+    public function teknisis()
+{
+    return $this->hasManyThrough(
+        Teknisi::class,
+        Penyelesaian::class,
+        'penjab_layanan_id',   
+        'id',                  
+        'id',                 
+        'laporan_id'          
+    );
+}
 }

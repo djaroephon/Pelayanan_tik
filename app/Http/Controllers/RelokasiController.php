@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Relokasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RelokasiController extends Controller
 {
@@ -33,9 +34,13 @@ class RelokasiController extends Controller
             'surat_bukti_izin_relokasi' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        $file = $request->file('surat_bukti_izin_relokasi');
-        $filename = time().'_'.$file->getClientOriginalName();
-        $file->storeAs('public/relokasi', $filename);
+            $fileName = time().'_'.uniqid().'.'.$request->file('surat_bukti_izin_relokasi')->getClientOriginalExtension();
+            $filePath = $request->file('surat_bukti_izin_relokasi')->storeAs('relokasi', $fileName, 'public');
+
+            Log::info('Files uploaded:', [
+                'surat_bukti_izin_relokasi' => $filePath,
+            ]);
+
 
         Relokasi::create([
             'guest_id' => Auth::guard('guest')->id(),
@@ -50,7 +55,7 @@ class RelokasiController extends Controller
             'koordinat_awal' => $request->koordinat_awal,
             'instansi_tujuan' => $request->instansi_tujuan,
             'koordinat_tujuan' => $request->koordinat_tujuan,
-            'surat_bukti_izin_relokasi' => $filename,
+            'surat_bukti_izin_relokasi' => $filePath,
             'status' => 'pending',
         ]);
 
