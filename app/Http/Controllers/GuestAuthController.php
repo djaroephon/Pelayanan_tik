@@ -98,7 +98,7 @@ class GuestAuthController extends Controller
             $apiResponse = Http::withHeaders([
                 'X-API-Key' => env('API_KEY'),
                 'Accept' => 'application/json',
-            ])->get('http://123.108.103.129:8080/api/skpa');
+            ])->get('http://123.108.103.129:1150/api/skpa');
 
             $skpas = [];
 

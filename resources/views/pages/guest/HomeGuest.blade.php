@@ -437,13 +437,14 @@
                 <a href="/lapor" class="btn btn-primary mt-2">Ajukan Laporan</a>
             </div>
 
-            <div class="service-card animate-item">
+            <div class="service-card animate-item disabled">
+                <div class="coming-soon-badge"> Sedang Diperbaiki</div>
                 <div class="service-icon">
                     <i class="bi bi-hdd-rack"></i>
                 </div>
                 <h4>Layanan Relocation</h4>
                 <p>Permohonan relokasi perangkat TIK ke lokasi yang diinginkan dengan proses yang mudah dan cepat</p>
-                <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#relokasiModal">
+                <button type="button" class="btn btn-disabled mt-2" data-bs-toggle="modal" data-bs-target="#relokasiModal">
                     Ajukan Relokasi
                 </button>
             </div>
