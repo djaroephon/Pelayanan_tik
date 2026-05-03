@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class Guest extends Authenticatable
 {
     use Notifiable;
@@ -16,6 +19,8 @@ class Guest extends Authenticatable
         'nik',
         'nip',
         'instansi',
+        'jenis_instansi',
+        'asal_instansi',
         'no_hp',
         'surat_pernyataan_pengelola',
         'ktp',

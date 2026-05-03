@@ -483,23 +483,49 @@
                 </div>
             </div>
 
-                    <div class="form-group">
-    <label for="instansi">Instansi</label>
-    <select name="instansi" id="instansi" class="form-control @error('instansi') is-invalid @enderror" required>
-        <option value="">Pilih Instansi</option>
-        @foreach($skpas as $skpa)
-            <option value="{{ $skpa['nama_skpa'] }}" {{ old('instansi') == $skpa['nama_skpa'] ? 'selected' : '' }}>
-                {{ $skpa['nama_skpa'] }}
-            </option>
-        @endforeach
-    </select>
-    @error('instansi')
-        <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
+            <div class="mb-3">
+                <label for="jenis_instansi" class="form-label">Jenis Instansi<span class="required">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-building text-secondary"></i>
+                    </span>
+                    <select name="jenis_instansi" id="jenis_instansi" class="form-control border-start-0" required>
+                        <option value="">Pilih Jenis Instansi</option>
+                        <option value="provinsi">Provinsi</option>
+                        <option value="kabupaten">Kabupaten / Kota</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3" id="asal_instansi_container" style="display: none;">
+                <label for="asal_instansi" class="form-label">Asal Instansi (Kabupaten/Kota)<span class="required">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-map-marker-alt text-secondary"></i>
+                    </span>
+                    <select name="asal_instansi" id="asal_instansi" class="form-control border-start-0">
+                        <option value="">Pilih Asal Instansi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="instansi" class="form-label">Instansi<span class="required">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-university text-secondary"></i>
+                    </span>
+                    <select name="instansi" id="instansi" class="form-control border-start-0 @error('instansi') is-invalid @enderror" required disabled>
+                        <option value="">Pilih Instansi</option>
+                    </select>
+                </div>
+                @error('instansi')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
 
                     <div class="nav-buttons">
-                        <div></div> <!-- Untuk spacing  -->
+                        <div></div>
                         <button type="button" class="btn btn-primary next-btn">Selanjutnya <i class="fas fa-arrow-right ms-2"></i></button>
                     </div>
                 </div>
@@ -544,6 +570,7 @@
                         <button type="button" class="btn btn-outline-secondary prev-btn"><i class="fas fa-arrow-left me-2"></i>Sebelumnya</button>
                         <button type="button" class="btn btn-primary next-btn">Selanjutnya <i class="fas fa-arrow-right ms-2"></i></button>
                     </div>
+
                 </div>
 
                 <div class="form-section" id="section3">
@@ -769,6 +796,77 @@
                 this.parentElement.parentElement.classList.remove('focused');
             });
         });
+
+        const jenisInstansi = document.getElementById('jenis_instansi');
+        const asalInstansiContainer = document.getElementById('asal_instansi_container');
+        const asalInstansi = document.getElementById('asal_instansi');
+        const instansi = document.getElementById('instansi');
+
+        fetch('/guest/api/asal-instansi')
+            .then(response => response.json())
+            .then(data => {
+                if(data.status && data.data) {
+                    data.data.forEach(item => {
+                        if(item.toLowerCase() !== 'provinsi') {
+                            const option = document.createElement('option');
+                            option.value = item;
+                            option.textContent = item;
+                            asalInstansi.appendChild(option);
+                        }
+                    });
+                }
+            });
+
+        jenisInstansi.addEventListener('change', function() {
+            instansi.innerHTML = '<option value="">Pilih Instansi</option>';
+            instansi.disabled = true;
+
+            if (this.value === 'kabupaten') {
+                asalInstansiContainer.style.display = 'block';
+                asalInstansi.setAttribute('required', 'required');
+                asalInstansi.value = '';
+            } else if (this.value === 'provinsi') {
+                asalInstansiContainer.style.display = 'none';
+                asalInstansi.removeAttribute('required');
+                asalInstansi.value = '';
+                
+                fetchInstansi('Provinsi');
+            } else {
+                asalInstansiContainer.style.display = 'none';
+                asalInstansi.removeAttribute('required');
+            }
+        });
+
+        asalInstansi.addEventListener('change', function() {
+            if (this.value) {
+                fetchInstansi(this.value);
+            } else {
+                instansi.innerHTML = '<option value="">Pilih Instansi</option>';
+                instansi.disabled = true;
+            }
+        });
+
+        function fetchInstansi(kabupaten) {
+            instansi.innerHTML = '<option value="">Loading...</option>';
+            instansi.disabled = true;
+            fetch(`/guest/api/instansi?kabupaten=${encodeURIComponent(kabupaten)}`)
+                .then(response => response.json())
+                .then(data => {
+                    instansi.innerHTML = '<option value="">Pilih Instansi</option>';
+                    if(data.status && data.SKPA) {
+                        data.SKPA.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.nama_skpa;
+                            option.textContent = item.nama_skpa;
+                            instansi.appendChild(option);
+                        });
+                        instansi.disabled = false;
+                    }
+                })
+                .catch(() => {
+                    instansi.innerHTML = '<option value="">Gagal memuat instansi</option>';
+                });
+        }
     </script>
 
 </body>

@@ -94,29 +94,49 @@ class GuestAuthController extends Controller
 
     public function showRegistrationForm()
     {
+        return view('pages.guest.register');
+    }
+
+    public function getAsalInstansi()
+    {
         try {
             $apiResponse = Http::withHeaders([
                 'X-API-Key' => env('API_KEY'),
                 'Accept' => 'application/json',
-            ])->get('http://123.108.103.129:1150/api/skpa');
-
-            $skpas = [];
+            ])->get(env('API_DINAS_URL', 'http://127.0.0.1:8001').'/api/asal-instansi');
 
             if ($apiResponse->successful()) {
-                $data = $apiResponse->json();
-                if ($data['status'] && isset($data['SKPA'])) {
-                    $skpas = $data['SKPA'];
-                }
-            } else {
-                Log::error('Gagal mengambil data SKPA: '.$apiResponse->body());
+                return response()->json($apiResponse->json());
             }
+            return response()->json(['status' => false, 'data' => []]);
+        } catch (\Exception $e) {
+            Log::error('Error mengambil data asal instansi: '.$e->getMessage());
+            return response()->json(['status' => false, 'data' => []]);
+        }
+    }
 
+    public function getInstansi(Request $request)
+    {
+        try {
+            $kabupaten = $request->query('kabupaten');
+            $url = env('API_DINAS_URL', 'http://127.0.0.1:8001').'/api/skpa';
+            if ($kabupaten) {
+                $url .= '?kabupaten=' . urlencode($kabupaten);
+            }
+            
+            $apiResponse = Http::withHeaders([
+                'X-API-Key' => env('API_KEY'),
+                'Accept' => 'application/json',
+            ])->get($url);
+
+            if ($apiResponse->successful()) {
+                return response()->json($apiResponse->json());
+            }
+            return response()->json(['status' => false, 'SKPA' => []]);
         } catch (\Exception $e) {
             Log::error('Error mengambil data SKPA: '.$e->getMessage());
-            $skpas = [];
+            return response()->json(['status' => false, 'SKPA' => []]);
         }
-
-        return view('pages.guest.register', compact('skpas'));
     }
 
     public function register(Request $request)
@@ -126,6 +146,8 @@ class GuestAuthController extends Controller
             'nik' => 'required|string|unique:guest,nik|max:20',
             'nip' => 'required|string|unique:guest,nip|max:20',
             'no_hp' => 'required|string|unique:guest,no_hp|max:20',
+            'jenis_instansi' => 'required|string|max:50',
+            'asal_instansi' => 'nullable|string|max:100',
             'instansi' => 'required|string|max:100',
             'surat_pernyataan_pengelola' => 'required|file|mimes:pdf|max:2048',
             'ktp' => 'required|file|mimes:jpg,jpeg,png|max:2048',
@@ -150,6 +172,8 @@ class GuestAuthController extends Controller
                 'nik' => $request->nik,
                 'nip' => $request->nip,
                 'no_hp' => $request->no_hp,
+                'jenis_instansi' => $request->jenis_instansi,
+                'asal_instansi' => $request->asal_instansi,
                 'instansi' => $request->instansi,
                 'surat_pernyataan_pengelola' => $suratPath,
                 'ktp' => $ktpPath,

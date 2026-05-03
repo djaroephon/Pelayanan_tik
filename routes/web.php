@@ -39,6 +39,8 @@ Route::prefix('guest')->group(function () {
     Route::post('/register', [GuestAuthController::class, 'register']);
     Route::post('/logout', [GuestAuthController::class, 'logout'])->name('guest.logout');
     Route::get('/download-template', [GuestAuthController::class, 'downloadTemplate'])->name('guest.download.template');
+    Route::get('/api/asal-instansi', [GuestAuthController::class, 'getAsalInstansi'])->name('guest.api.asal.instansi');
+    Route::get('/api/instansi', [GuestAuthController::class, 'getInstansi'])->name('guest.api.instansi');
 
 });
 
