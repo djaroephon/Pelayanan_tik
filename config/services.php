@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'api_dinas' => [
+        'url' => env('API_DINAS_URL', 'http://127.0.0.1:8001'),
+        'key' => env('API_KEY'),
+    ],
+
 ];

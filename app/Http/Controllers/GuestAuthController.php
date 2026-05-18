@@ -101,9 +101,9 @@ class GuestAuthController extends Controller
     {
         try {
             $apiResponse = Http::withHeaders([
-                'X-API-Key' => env('API_KEY'),
+                'X-API-Key' => config('services.api_dinas.key'),
                 'Accept' => 'application/json',
-            ])->get(env('API_DINAS_URL', 'http://127.0.0.1:8001').'/api/asal-instansi');
+            ])->get(config('services.api_dinas.url').'/api/asal-instansi');
 
             if ($apiResponse->successful()) {
                 return response()->json($apiResponse->json());
@@ -119,13 +119,13 @@ class GuestAuthController extends Controller
     {
         try {
             $kabupaten = $request->query('kabupaten');
-            $url = env('API_DINAS_URL', 'http://127.0.0.1:8001').'/api/skpa';
+            $url = config('services.api_dinas.url').'/api/skpa';
             if ($kabupaten) {
                 $url .= '?kabupaten=' . urlencode($kabupaten);
             }
             
             $apiResponse = Http::withHeaders([
-                'X-API-Key' => env('API_KEY'),
+                'X-API-Key' => config('services.api_dinas.key'),
                 'Accept' => 'application/json',
             ])->get($url);
 
