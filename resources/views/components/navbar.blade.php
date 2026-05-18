@@ -1,241 +1,131 @@
-<style>
-        :root {
-            --primary-color: #1c908d;
-            --secondary-color: #156d6a;
-            --accent-color: #ffc107;
-            --dark-color: #0f4c4a;
-            --light-color: #f8f9fa;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            padding: 1rem 1rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .navbar.scrolled {
-            padding: 0.6rem 1rem;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
-            background: rgba(28, 144, 141, 0.95);
-        }
-
-        .navbar-brand {
-            color: white;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            transition: var(--transition);
-            font-size: 1.25rem;
-        }
-
-        .navbar-brand:hover {
-            transform: translateY(-2px);
-            color: white;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            margin-right: 12px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 5px;
-        }
-
-        .navbar-brand:hover .logo-container {
-            transform: rotate(5deg) scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .logo-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-weight: 500;
-            position: relative;
-            transition: var(--transition);
-            margin: 0 0.5rem;
-            padding: 0.5rem 0.75rem !important;
-            border-radius: 6px;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: white !important;
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: white;
-            transition: var(--transition);
-        }
-
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 80%;
-        }
-
-        .btn-container {
-            gap: 0.75rem;
-        }
-
-        .btn-report {
-            background-color: var(--accent-color);
-            font-weight: 600;
-            color: #333;
-            transition: var(--transition);
-            border-radius: 8px;
-            padding: 0.5rem 1.25rem;
-            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
-        }
-
-        .btn-report:hover {
-            background-color: #e0a800;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
-        }
-
-        .btn-login {
-            background-color: white;
-            color: var(--primary-color);
-            font-weight: 600;
-            transition: var(--transition);
-            border-radius: 8px;
-            padding: 0.5rem 1.25rem;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-login:hover {
-            background-color: #f5f5f5;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(255, 255, 255, 0.4);
-        }
-
-        .navbar-toggler {
-            border: none;
-            padding: 0.25rem 0.5rem;
-        }
-
-        .navbar-toggler:focus {
-            box-shadow: none;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: rgba(28, 144, 141, 0.98);
-                border-radius: 12px;
-                margin-top: 1rem;
-                padding: 1rem;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            }
-
-            .nav-link {
-                margin: 0.25rem 0;
-                text-align: center;
-            }
-
-            .btn-container {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 1rem;
-            }
-
-            .btn-report, .btn-login {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
-
- <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#home">
-                <div class="logo-container">
-                    <img src="{{ asset('images/logo-pancacita.png') }}" alt="Diskominsa Logo" class="logo-svg" />
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4">
+    <div class="container mx-auto px-6">
+        <div class="glass flex items-center justify-between rounded-2xl px-6 py-3 shadow-lg transition-all duration-300">
+            <!-- Brand -->
+            <a href="{{ route('landing') }}" class="flex items-center space-x-3 group">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 p-2 shadow-lg shadow-primary-600/20 transition-transform group-hover:scale-110">
+                    <img src="{{ asset('images/logo-pancacita.png') }}" alt="Logo" class="h-full w-auto">
                 </div>
-                Diskominsa Aceh
+                <div class="flex flex-col">
+                    <span class="font-display text-lg font-bold leading-tight tracking-tight text-surface-900">Diskominsa</span>
+                    <span class="text-xs font-medium text-surface-500 uppercase tracking-wider">Aceh TIK</span>
+                </div>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+
+            <!-- Desktop Nav Links -->
+            <div class="hidden items-center space-x-8 md:flex">
+                <a href="#home" class="text-sm font-semibold text-surface-600 transition-colors hover:text-primary-600">Beranda</a>
+                <a href="#about" class="text-sm font-semibold text-surface-600 transition-colors hover:text-primary-600">Tentang</a>
+                <a href="#services" class="text-sm font-semibold text-surface-600 transition-colors hover:text-primary-600">Layanan</a>
+                <a href="#contact" class="text-sm font-semibold text-surface-600 transition-colors hover:text-primary-600">Kontak</a>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="hidden items-center space-x-3 md:flex">
+                @if(Auth::guard('guest')->check())
+                    <a href="{{ route('guest.home') }}" class="flex items-center space-x-2 rounded-xl bg-primary-50 px-5 py-2.5 text-sm font-bold text-primary-600 transition-all hover:bg-primary-100">
+                        <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @else
+                    <a href="{{ route('guest.login') }}" class="flex items-center space-x-2 rounded-xl bg-primary-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition-all hover:scale-105 hover:bg-primary-700 active:scale-95">
+                        <i data-lucide="shield-check" class="h-4 w-4"></i>
+                        <span>Akses Layanan</span>
+                    </a>
+                    <a href="{{ route('login') }}" class="flex items-center space-x-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-surface-700 border border-surface-200 transition-all hover:bg-surface-50">
+                        <i data-lucide="log-in" class="h-4 w-4"></i>
+                        <span>Login</span>
+                    </a>
+                @endif
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" class="rounded-xl p-2 text-surface-600 md:hidden hover:bg-surface-100 transition-colors">
+                <i data-lucide="menu" id="menu-icon" class="h-6 w-6"></i>
             </button>
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">Tentang Kami</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Layanan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Kontak</a>
-                    </li>
-                </ul>
-                <div class="d-flex flex-column flex-lg-row gap-2 btn-container">
-                    <a href="{{ route('guest.login') }}" class="btn btn-report">
-                        <i class="fas fa-bullhorn me-2"></i>Akses Layanan
-                    </a>
-                    <a href="{{ route('login') }}" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                    </a>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="absolute top-full left-6 right-6 mt-4 hidden origin-top scale-95 opacity-0 transition-all duration-300 md:hidden">
+            <div class="glass flex flex-col space-y-4 rounded-2xl p-6 shadow-xl">
+                <a href="#home" class="mobile-nav-link text-lg font-semibold text-surface-700">Beranda</a>
+                <a href="#about" class="mobile-nav-link text-lg font-semibold text-surface-700">Tentang</a>
+                <a href="#services" class="mobile-nav-link text-lg font-semibold text-surface-700">Layanan</a>
+                <a href="#contact" class="mobile-nav-link text-lg font-semibold text-surface-700">Kontak</a>
+                <div class="h-px bg-surface-200"></div>
+                <div class="flex flex-col space-y-3 pt-2">
+                    @if(Auth::guard('guest')->check())
+                        <a href="{{ route('guest.home') }}" class="flex items-center justify-center space-x-2 rounded-xl bg-primary-600 py-3 font-bold text-white">
+                            <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    @else
+                        <a href="{{ route('guest.login') }}" class="flex items-center justify-center space-x-2 rounded-xl bg-primary-600 py-3 font-bold text-white">
+                            <i data-lucide="shield-check" class="h-5 w-5"></i>
+                            <span>Akses Layanan</span>
+                        </a>
+                        <a href="{{ route('login') }}" class="flex items-center justify-center space-x-2 rounded-xl border border-surface-200 bg-white py-3 font-bold text-surface-700">
+                            <i data-lucide="log-in" class="h-5 w-5"></i>
+                            <span>Login</span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-  <script>
-        window.addEventListener('scroll', function(){
-            const navbar = document.querySelector('.navbar');
-            if(window.scrollY > 50){
-                navbar.classList.add('scrolled');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const nav = document.getElementById('main-nav');
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        // Scroll Effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                nav.classList.add('py-2');
+                nav.querySelector('.glass').classList.add('bg-white/90', 'shadow-xl');
             } else {
-                navbar.classList.remove('scrolled');
+                nav.classList.remove('py-2');
+                nav.querySelector('.glass').classList.remove('bg-white/90', 'shadow-xl');
             }
         });
 
-        // Close navbar when clicking on a link (for mobile)
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const navbarToggler = document.querySelector('.navbar-toggler');
-            const navbarCollapse = document.querySelector('.navbar-collapse');
+        // Mobile Menu Toggle
+        mobileToggle.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            
+            if (isOpen) {
+                // Close
+                mobileMenu.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                menuIcon.setAttribute('data-lucide', 'menu');
+            } else {
+                // Open
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('scale-95', 'opacity-0');
+                    mobileMenu.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                menuIcon.setAttribute('data-lucide', 'x');
+            }
+            lucide.createIcons();
+        });
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (navbarCollapse.classList.contains('show')) {
-                        navbarToggler.click();
-                    }
-                });
+        // Close mobile menu on link click
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                menuIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
             });
         });
-    </script>
+    });
+</script>

@@ -1,384 +1,146 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login Layanan</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
-    <link rel="stylesheet" href="{{ asset('css/font.css') }}" />
-    <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+@extends('layouts.main')
 
-    <style>
-        * {
-            font-family: "Poppins", sans-serif;
-        }
+@section('title', 'Login Layanan | Diskominsa Aceh')
 
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
+@section('content')
+<section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-50 pt-20 pb-12 px-4 sm:px-6">
+    <!-- Background Accents -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-1/4 -left-20 w-64 h-64 md:w-96 md:h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        <div class="absolute bottom-1/4 -right-20 w-64 h-64 md:w-96 md:h-96 bg-accent-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+    </div>
 
-        body {
-            background: url('{{ asset('images/123.jpg') }}') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(28, 144, 141, 0.7) 0%, rgba(0, 0, 0, 0.6) 100%);
-            z-index: 1;
-        }
-
-        main {
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .card {
-            max-width: 450px;
-            width: 100%;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            transform: translateY(0);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            background-color: #1c908d;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            box-shadow: 0 5px 15px rgba(28, 144, 141, 0.3);
-        }
-
-        h3 {
-            color: #1c908d;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #6c757d;
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-group-text {
-            background-color: white;
-            border-right: none;
-        }
-
-        .form-control {
-            border-left: none;
-            padding-left: 0;
-            height: 50px;
-        }
-
-        .form-control:focus {
-            box-shadow: none;
-            border-color: #ced4da;
-        }
-
-        .form-control:focus + .input-group-append .input-group-text {
-            border-color: #1c908d;
-        }
-
-        .password-toggle {
-            cursor: pointer;
-            background-color: white;
-            color: #6c757d;
-            border-left: none;
-        }
-
-        .password-toggle:hover {
-            color: #1c908d;
-        }
-
-        .btn-primary {
-            background-color: #1c908d;
-            border: none;
-            height: 50px;
-            border-radius: 10px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #156d6a;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(28, 144, 141, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: #6c757d;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background-color: #dee2e6;
-        }
-
-        .divider span {
-            padding: 0 1rem;
-            font-size: 0.9rem;
-        }
-
-        .links {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .links a {
-            color: #1c908d;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .links a:hover {
-            color: #156d6a;
-            text-decoration: underline;
-        }
-
-        .footer {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 1rem;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @media (max-width: 576px) {
-            .card {
-                padding: 2rem 1.5rem;
-            }
-
-            .logo {
-                width: 70px;
-                height: 70px;
-                font-size: 1.7rem;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="overlay"></div>
-
-    <main>
-        <div class="card">
-            <div class="logo-container">
-                <div class="logo">
-                    <i class="fas fa-user-shield"></i>
+    <div class="relative z-10 w-full max-w-md login-card opacity-0">
+        <div class="glass overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 shadow-2xl">
+            <!-- Logo & Header -->
+            <div class="mb-8 md:mb-10 text-center">
+                <div class="mx-auto mb-6 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-primary-600 p-3 shadow-lg shadow-primary-600/20">
+                    <i data-lucide="shield-check" class="h-full w-full text-white"></i>
                 </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-surface-900">Selamat Datang</h2>
+                <p class="mt-2 text-sm sm:text-base text-surface-500">Silakan masuk untuk mengakses layanan TIK</p>
             </div>
 
-            <h3 class="text-center">Login Layanan</h3>
-            <p class="subtitle">Masukkan NIK dan password Anda untuk mengakses sistem</p>
-
+            <!-- Alerts -->
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="mb-6 flex items-center space-x-3 rounded-2xl bg-red-50 p-4 text-sm text-red-600 border border-red-100">
+                    <i data-lucide="alert-circle" class="h-5 w-5 shrink-0"></i>
+                    <p>{{ session('error') }}</p>
                 </div>
             @endif
 
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="mb-6 flex items-center space-x-3 rounded-2xl bg-accent-50 p-4 text-sm text-accent-600 border border-accent-100">
+                    <i data-lucide="check-circle" class="h-5 w-5 shrink-0"></i>
+                    <p>{{ session('success') }}</p>
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('guest.login') }}">
+            <!-- Login Form -->
+            <form method="POST" action="{{ route('guest.login') }}" class="space-y-6">
                 @csrf
 
-                <div class="mb-3">
-                    <label for="nik" class="form-label">NIK</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-id-card text-secondary"></i>
-                        </span>
-                        <input
-                            type="text"
-                            id="nik"
-                            name="nik"
+                <div>
+                    <label for="nik" class="mb-2 block text-sm font-bold text-surface-700">NIK (Nomor Induk Kependudukan)</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 text-surface-400 group-focus-within:text-primary-600 transition-colors">
+                            <i data-lucide="id-card" class="h-5 w-5"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="nik" 
+                            name="nik" 
                             value="{{ old('nik') }}"
-                            class="form-control border-start-0 @error('nik') is-invalid @enderror"
-                            placeholder="Masukkan NIK Anda"
-                            required
+                            class="block w-full rounded-2xl border border-surface-200 bg-white py-3 sm:py-4 pl-12 pr-4 text-surface-900 placeholder-surface-400 outline-none transition-all focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10 text-sm sm:text-base" 
+                            placeholder="Masukkan 16 digit NIK" 
+                            required 
                             autofocus
+                            autocomplete="username"
                         >
                     </div>
                     @error('nik')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        <p class="mt-2 text-xs font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-lock text-secondary"></i>
-                        </span>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            class="form-control border-start-0 @error('password') is-invalid @enderror"
-                            placeholder="Masukkan password Anda"
+                <div>
+                    <div class="mb-2 flex items-center justify-between">
+                        <label for="password" class="text-sm font-bold text-surface-700">Password</label>
+                        <a href="#" class="text-xs font-semibold text-primary-600 hover:underline">Lupa Password?</a>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 text-surface-400 group-focus-within:text-primary-600 transition-colors">
+                            <i data-lucide="lock" class="h-5 w-5"></i>
+                        </div>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="block w-full rounded-2xl border border-surface-200 bg-white py-3 sm:py-4 pl-12 pr-12 text-surface-900 placeholder-surface-400 outline-none transition-all focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10 text-sm sm:text-base" 
+                            placeholder="••••••••" 
                             required
+                            autocomplete="current-password"
                         >
-                        <span class="input-group-text password-toggle border-start-0" id="togglePassword">
-                            <i class="far fa-eye"></i>
-                        </span>
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-4 text-surface-400 hover:text-surface-600">
+                            <i data-lucide="eye" id="eye-icon" class="h-5 w-5"></i>
+                        </button>
                     </div>
                     @error('password')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        <p class="mt-2 text-xs font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Masuk
+                <div class="pt-2">
+                    <button type="submit" class="flex w-full items-center justify-center space-x-2 rounded-2xl bg-primary-600 py-3 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-primary-600/20 transition-all hover:bg-primary-700 active:scale-[0.98]">
+                        <span>Masuk ke Akun</span>
+                        <i data-lucide="log-in" class="h-5 w-5"></i>
                     </button>
-                </div>
-
-                <div class="divider">
-                    <span>Atau</span>
-                </div>
-
-                <div class="text-center">
-                    <p class="mb-0">Belum punya akun? <a href="{{ route('guest.register') }}">Daftar disini</a></p>
                 </div>
             </form>
 
-            <div class="links">
-                <a href="{{ route('landing') }}"><i class="fas fa-home me-1"></i>Kembali ke Beranda</a>
-                <a href="#"><i class="fas fa-question-circle me-1"></i>Bantuan</a>
+            <!-- Footer Links -->
+            <div class="mt-8 sm:mt-10 text-center">
+                <p class="text-xs sm:text-sm text-surface-500">
+                    Belum memiliki akun? 
+                    <a href="{{ route('guest.register') }}" class="font-bold text-primary-600 hover:underline">Daftar Sekarang</a>
+                </p>
+                <div class="mt-4 sm:mt-6 flex items-center justify-center space-x-4">
+                    <a href="{{ route('landing') }}" class="flex items-center space-x-1 text-[10px] sm:text-xs font-semibold text-surface-400 hover:text-surface-600">
+                        <i data-lucide="arrow-left" class="h-3 w-3"></i>
+                        <span>Beranda</span>
+                    </a>
+                    <span class="h-1 w-1 rounded-full bg-surface-300"></span>
+                    <a href="#" class="text-[10px] sm:text-xs font-semibold text-surface-400 hover:text-surface-600">Bantuan</a>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
+</section>
+@endsection
 
-    <footer class="footer">
-        <p>© 2025 Diskominsa Aceh. All rights reserved.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Animation (Faster)
+        anime({
+            targets: '.login-card',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            duration: 600,
+            easing: 'easeOutQuart'
         });
 
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(event) {
-            const nik = document.getElementById('nik').value;
-            const password = document.getElementById('password').value;
+        // Password Toggle
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eye-icon');
 
-            if (!nik || !password) {
-                event.preventDefault();
-                alert('Harap isi semua field yang diperlukan');
-            }
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            eyeIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
         });
-
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('focused');
-            });
-        });
-    </script>
-
-</body>
-</html>
+    });
+</script>
+@endpush

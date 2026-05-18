@@ -1,340 +1,145 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Guest - Sistem Laporan TIK</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #1c908d;
-            --secondary-color: #156d6a;
-            --accent-color: #f8f9fa;
-            --text-color: #333;
-        }
+@extends('layouts.main')
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f5;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-.status-completed {
-    background-color: #d4edda;
-    color: #155724;
-}
+@section('title', 'Laporan Saya | Portal Guest')
 
-.status-process {
-    background-color: #fff3cd;
-    color: #856404;
-}
+@section('content')
+<div class="flex min-h-screen bg-surface-50">
+    <!-- Sidebar -->
+    @include('components.sideGuest', ['guest' => Auth::guard('guest')->user()])
 
-.status-pending {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-        .main-content {
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-            min-height: 100vh;
-        }
-
-        .alert {
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: none;
-            margin-bottom: 20px;
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .table-title {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--accent-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-bottom: 0;
-        }
-
-        .table th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: 600;
-            padding: 12px 15px;
-            text-align: left;
-            position: sticky;
-            top: 0;
-        }
-
-        .table td {
-            padding: 12px 15px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .table tr {
-            transition: all 0.3s ease;
-        }
-
-        .table tr:hover {
-            background-color: rgba(28, 144, 141, 0.05);
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-            text-align: center;
-            min-width: 90px;
-        }
-
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-process {
-            background-color: #cce5ff;
-            color: #004085;
-        }
-
-        .status-completed {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .animate-item {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #6c757d;
-            display: none;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #dee2e6;
-        }
-
-        .action-btn {
-            padding: 5px 10px;
-            font-size: 0.875rem;
-            border-radius: 4px;
-        }
-
-        /* Desktop styles */
-        @media (min-width: 993px) {
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Tablet & Mobile styles */
-        @media (max-width: 992px) {
-            .main-content {
-                margin-left: 0;
-                padding-top: 70px;
-            }
-        }
-
-        /* Mobile kecil */
-        @media (max-width: 576px) {
-            .table-container {
-                padding: 15px;
-            }
-
-            .table th, .table td {
-                padding: 8px 10px;
-                font-size: 0.9rem;
-            }
-
-            .table-title {
-                font-size: 1.25rem;
-            }
-
-            .status-badge {
-                min-width: 70px;
-                padding: 4px 8px;
-            }
-        }
-
-        /* Responsif untuk tabel */
-        @media (max-width: 768px) {
-            .table-responsive {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .table th:nth-child(1),
-            .table td:nth-child(1) {
-                min-width: 100px;
-            }
-
-            .table th:nth-child(2),
-            .table td:nth-child(2) {
-                min-width: 120px;
-            }
-
-            .table th:nth-child(3),
-            .table td:nth-child(3) {
-                min-width: 180px;
-            }
-
-            .table th:nth-child(4),
-            .table td:nth-child(4) {
-                min-width: 100px;
-            }
-
-            .table th:nth-child(5),
-            .table td:nth-child(5) {
-                min-width: 110px;
-            }
-        }
-    </style>
-</head>
-<body>
-    @include('components.sideGuest')
-    <div class="main-content" id="mainContent">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Main Content -->
+    <div class="flex-1 lg:ml-72">
+        <!-- Header -->
+        <header class="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-surface-200 bg-white/80 px-8 backdrop-blur-md">
+            <div>
+                <h1 class="font-display text-xl font-bold text-surface-900">Riwayat Laporan</h1>
+                <p class="text-xs text-surface-500">Pantau perkembangan pengajuan layanan Anda</p>
             </div>
-        @endif
+            <div class="flex items-center space-x-4">
+                <a href="/lapor" class="inline-flex items-center space-x-2 rounded-xl bg-primary-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-primary-600/20 transition-all hover:bg-primary-700">
+                    <i data-lucide="plus-circle" class="h-4 w-4"></i>
+                    <span>Buat Laporan</span>
+                </a>
+            </div>
+        </header>
 
-        <div class="table-container animate-item">
-            <h3 class="table-title"><i class="bi bi-list-check me-2"></i>Daftar Laporan Saya</h3>
+        <main class="p-4 sm:p-8">
+            <!-- Table Card -->
+            <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm border border-surface-200 table-card opacity-0">
+                <div class="border-b border-surface-100 bg-surface-50/50 px-6 sm:px-8 py-6">
+                    <h2 class="font-display text-lg font-bold text-surface-900 flex items-center space-x-2">
+                        <i data-lucide="list" class="h-5 w-5 text-primary-600"></i>
+                        <span>Daftar Pengajuan</span>
+                    </h2>
+                </div>
 
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Layanan</th>
-                            <th>Permasalahan</th>
-                            <th>Tanggal</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($laporan as $item)
-                            <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->kategori->nama_kategori }}</td>
-                                <td>{{ $item->laporan_permasalahan }}</td>
-                                <td>{{ $item->created_at->format('d-m-Y') }}</td>
-                               <td>
-    @if ($item->status === 'complete')
-        <i class="bi bi-check-circle-fill text-success me-1"></i>
-        <span class="status-badge status-completed">
-            Selesai
-        </span>
-    @elseif ($item->status === 'process')
-        <i class="bi bi-hourglass-split text-warning me-1"></i>
-        <span class="status-badge status-process">
-            Diproses
-        </span>
-    @elseif ($item->status === 'pending')
-        <i class="bi bi-hourglass-top text-secondary me-1"></i>
-        <span class="status-badge status-pending">
-            Menunggu
-        </span>
-    @else
-        <i class="bi bi-question-circle text-info me-1"></i>
-        <span class="status-badge">
-            {{ ucfirst($item->status) }}
-        </span>
-    @endif
-</td>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse text-left min-w-[800px]">
+                        <thead>
+                            <tr class="border-b border-surface-100 bg-surface-50/30">
+                                <th class="px-6 sm:px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-surface-400">ID</th>
+                                <th class="px-6 sm:px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-surface-400">Layanan</th>
+                                <th class="px-6 sm:px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-surface-400">Permasalahan</th>
+                                <th class="px-6 sm:px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-surface-400">Tanggal</th>
+                                <th class="px-6 sm:px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-surface-400 text-center">Status</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="divide-y divide-surface-100">
+                            @forelse($laporan as $item)
+                                <tr class="group hover:bg-surface-50 transition-colors">
+                                    <td class="px-6 sm:px-8 py-6 text-sm font-bold text-surface-900">#{{ $item->id }}</td>
+                                    <td class="px-6 sm:px-8 py-6">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
+                                                <i data-lucide="layers" class="h-4 w-4"></i>
+                                            </div>
+                                            <span class="text-sm font-semibold text-surface-700">{{ $item->kategori->nama_kategori }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 sm:px-8 py-6">
+                                        <p class="max-w-xs truncate text-sm text-surface-600 group-hover:text-surface-900 transition-colors" title="{{ $item->laporan_permasalahan }}">
+                                            {{ $item->laporan_permasalahan }}
+                                        </p>
+                                    </td>
+                                    <td class="px-6 sm:px-8 py-6">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-surface-700">{{ $item->created_at->format('d M Y') }}</span>
+                                            <span class="text-[10px] text-surface-400">{{ $item->created_at->format('H:i') }} WIB</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 sm:px-8 py-6 text-center">
+                                        @if ($item->status === 'complete')
+                                            <span class="inline-flex items-center space-x-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600 border border-emerald-100">
+                                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                                                <span>Selesai</span>
+                                            </span>
+                                        @elseif ($item->status === 'process')
+                                            <span class="inline-flex items-center space-x-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600 border border-amber-100">
+                                                <span class="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse"></span>
+                                                <span>Diproses</span>
+                                            </span>
+                                        @elseif ($item->status === 'pending')
+                                            <span class="inline-flex items-center space-x-1.5 rounded-full bg-surface-100 px-3 py-1 text-xs font-bold text-surface-500 border border-surface-200">
+                                                <span class="h-1.5 w-1.5 rounded-full bg-surface-500"></span>
+                                                <span>Menunggu</span>
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center space-x-1.5 rounded-full bg-primary-50 px-3 py-1 text-xs font-bold text-primary-600 border border-primary-100">
+                                                <i data-lucide="info" class="h-3 w-3"></i>
+                                                <span>{{ ucfirst($item->status) }}</span>
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 sm:px-8 py-20 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-surface-50 text-surface-200">
+                                                <i data-lucide="inbox" class="h-10 w-10"></i>
+                                            </div>
+                                            <h3 class="font-display text-lg font-bold text-surface-900">Belum Ada Laporan</h3>
+                                            <p class="mt-1 text-sm text-surface-500">Anda belum pernah mengajukan laporan layanan TIK.</p>
+                                            <a href="/lapor" class="mt-6 font-bold text-primary-600 hover:underline">Buat Laporan Pertama</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
+        </main>
 
-            <div class="empty-state animate-item" id="emptyState">
-                <i class="bi bi-inbox"></i>
-                <h4>Belum ada laporan</h4>
-                <p>Anda belum membuat laporan permintaan layanan TIK.</p>
-            </div>
-        </div>
+        <!-- Footer -->
+        <footer class="px-8 py-6 text-center text-xs text-surface-400 border-t border-surface-200">
+            <p>&copy; {{ date('Y') }} Diskominsa Aceh. Sistem Informasi Pelayanan TIK v2.2.0</p>
+        </footer>
     </div>
+</div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-
-            sidebarToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                sidebar.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function(event) {
-                if (window.innerWidth < 992 &&
-                    !sidebar.contains(event.target) &&
-                    !sidebarToggle.contains(event.target) &&
-                    sidebar.classList.contains('active')) {
-                    sidebar.classList.remove('active');
-                }
-            });
-
-            anime({
-                targets: '.animate-item',
-                translateY: 0,
-                opacity: 1,
-                delay: anime.stagger(100),
-                duration: 800,
-                easing: 'easeOutQuart'
-            });
-
-            anime({
-                targets: 'tbody tr',
-                translateX: [20, 0],
-                opacity: [0, 1],
-                delay: anime.stagger(100),
-                duration: 600,
-                easing: 'easeOutQuad'
-            });
-
-            const tableRows = document.querySelectorAll('tbody tr');
-            const emptyState = document.getElementById('emptyState');
-
-            if (tableRows.length === 0) {
-                emptyState.style.display = 'block';
-            }
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Table Card Animation (Faster)
+        anime({
+            targets: '.table-card',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            duration: 600,
+            easing: 'easeOutQuart'
         });
-    </script>
-</body>
-</html>
+
+        // Rows Stagger Animation
+        anime({
+            targets: 'tbody tr',
+            translateX: [-10, 0],
+            opacity: [0, 1],
+            delay: anime.stagger(30, {start: 200}),
+            duration: 600,
+            easing: 'easeOutQuart'
+        });
+    });
+</script>
+@endpush

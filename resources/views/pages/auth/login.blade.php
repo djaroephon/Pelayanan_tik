@@ -1,376 +1,115 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
-    <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@extends('layouts.main')
 
-    <style>
-        * {
-            font-family: "Poppins", sans-serif;
-            transition: all 0.3s ease;
-        }
+@section('title', 'Admin Login | Diskominsa Aceh')
 
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
+@section('content')
+<section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-50 px-4 sm:px-6">
+    <!-- Background Accents -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-1/4 -left-20 w-64 h-64 md:w-[30rem] md:h-[30rem] bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        <div class="absolute bottom-1/4 -right-20 w-64 h-64 md:w-[30rem] md:h-[30rem] bg-accent-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+    </div>
 
-        body {
-            background: linear-gradient(120deg, #1c908d 0%, #156d6a 100%);
-            background-size: cover;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1;
-        }
-
-        main {
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .card {
-            max-width: 450px;
-            width: 100%;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            transform: translateY(0);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #1c908d 0%, #156d6a 100%);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            box-shadow: 0 5px 15px rgba(28, 144, 141, 0.3);
-        }
-
-        h3 {
-            color: #1c908d;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: #6c757d;
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-group-text {
-            background-color: white;
-            border-right: none;
-            padding: 0.75rem 1rem;
-        }
-
-        .form-control {
-            border-left: none;
-            padding: 0.75rem 1rem;
-            height: 50px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(28, 144, 141, 0.25);
-            border-color: #1c908d;
-        }
-
-        .form-control:focus + .input-group-append .input-group-text {
-            border-color: #1c908d;
-        }
-
-        .password-toggle-container {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 5;
-            background: white;
-            height: 30px;
-            width: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .password-toggle-container:hover {
-            color: #1c908d;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #1c908d 0%, #156d6a 100%);
-            border: none;
-            height: 50px;
-            border-radius: 10px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #156d6a 0%, #11504e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(28, 144, 141, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .links {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-        }
-
-        .links a {
-            color: #1c908d;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .links a:hover {
-            color: #156d6a;
-            text-decoration: underline;
-        }
-
-        .footer {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 1rem;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Animasi lahh */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @media (max-width: 576px) {
-            .card {
-                padding: 2rem 1.5rem;
-            }
-
-            .logo {
-                width: 70px;
-                height: 70px;
-                font-size: 1.7rem;
-            }
-
-            .links {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="overlay"></div>
-
-    <main>
-        <div class="card">
-            <div class="logo-container">
-                <div class="logo">
-                    <i class="fas fa-user-shield"></i>
+    <div class="relative z-10 w-full max-w-md login-card opacity-0">
+        <div class="glass overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-12 shadow-2xl">
+            <!-- Header -->
+            <div class="mb-8 md:mb-10 text-center">
+                <div class="mx-auto mb-6 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-primary-600 p-3 shadow-lg shadow-primary-600/20">
+                    <i data-lucide="shield-check" class="h-full w-full text-white"></i>
                 </div>
+                <h2 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-surface-900">Admin Portal</h2>
+                <p class="mt-2 text-sm sm:text-base text-surface-500">Silakan masuk untuk mengelola layanan</p>
             </div>
 
-            <h3 class="text-center">Login</h3>
-            <p class="subtitle">Masukkan nama dan password Anda untuk mengakses sistem</p>
-
+            <!-- Alerts -->
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="mb-6 rounded-2xl bg-red-50 p-4 text-sm text-red-600 border border-red-100 flex items-center space-x-3">
+                    <i data-lucide="alert-circle" class="h-5 w-5 shrink-0"></i>
+                    <p>{{ session('error') }}</p>
                 </div>
             @endif
 
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="mb-6 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-600 border border-emerald-100 flex items-center space-x-3">
+                    <i data-lucide="check-circle" class="h-5 w-5 shrink-0"></i>
+                    <p>{{ session('success') }}</p>
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login.submit') }}">
+            <form method="POST" action="{{ route('login.submit') }}" class="space-y-6">
                 @csrf
 
-                <div class="mb-3">
-                    <label for="name" class="form-label">Username</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-user text-secondary"></i>
-                        </span>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value="{{ old('name') }}"
-                            class="form-control border-start-0 @error('name') is-invalid @enderror"
-                            placeholder="Masukkan nama Anda"
-                            required
-                            autofocus
-                        >
+                <div class="space-y-2">
+                    <label for="name" class="text-sm font-bold text-surface-700">Username</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 text-surface-400 group-focus-within:text-primary-600 transition-colors">
+                            <i data-lucide="user" class="h-5 w-5"></i>
+                        </div>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus autocomplete="username" class="block w-full rounded-2xl border border-surface-200 bg-white py-3 sm:py-4 pl-12 pr-4 text-sm sm:text-base text-surface-900 outline-none transition-all focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10" placeholder="Username admin">
                     </div>
                     @error('name')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-4 position-relative">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group position-relative">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-lock text-secondary"></i>
-                        </span>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            class="form-control border-start-0 @error('password') is-invalid @enderror"
-                            placeholder="Masukkan password Anda"
-                            required
-                        >
-                        <div class="password-toggle-container" id="togglePassword">
-                            <i class="far fa-eye"></i>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="text-sm font-bold text-surface-700">Password</label>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 text-surface-400 group-focus-within:text-primary-600 transition-colors">
+                            <i data-lucide="lock" class="h-5 w-5"></i>
                         </div>
+                        <input type="password" id="password" name="password" required autocomplete="current-password" class="block w-full rounded-2xl border border-surface-200 bg-white py-3 sm:py-4 pl-12 pr-12 text-sm sm:text-base text-surface-900 outline-none transition-all focus:border-primary-600 focus:ring-4 focus:ring-primary-600/10" placeholder="••••••••">
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-4 text-surface-400 hover:text-surface-600 transition-colors">
+                            <i data-lucide="eye" class="h-5 w-5"></i>
+                        </button>
                     </div>
                     @error('password')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Masuk
-                    </button>
-                </div>
+                <button type="submit" class="group relative flex w-full items-center justify-center space-x-2 rounded-2xl bg-primary-600 py-3 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-primary-600/20 transition-all hover:bg-primary-700 active:scale-[0.98]">
+                    <span>Masuk ke Sistem</span>
+                    <i data-lucide="arrow-right" class="h-5 w-5 transition-transform group-hover:translate-x-1"></i>
+                </button>
             </form>
 
-            <div class="links">
-                <a href="{{ route('landing') }}"><i class="fas fa-home me-1"></i>Kembali ke Beranda</a>
+            <!-- Bottom Links -->
+            <div class="mt-8 sm:mt-10 border-t border-surface-100 pt-6 sm:pt-8 text-center">
+                <a href="{{ route('landing') }}" class="inline-flex items-center space-x-2 text-xs sm:text-sm font-semibold text-surface-400 hover:text-primary-600 transition-colors">
+                    <i data-lucide="home" class="h-4 w-4"></i>
+                    <span>Kembali ke Beranda</span>
+                </a>
             </div>
         </div>
-    </main>
+    </div>
+</section>
+@endsection
 
-    <footer class="footer">
-        <p>© 2025 Diskominsa Aceh. All rights reserved.</p>
-    </footer>
-
-    <!-- Bootstrap 5 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Entrance Animation (Faster)
+        anime({
+            targets: '.login-card',
+            translateY: [20, 0],
+            opacity: [0, 1],
+            duration: 600,
+            easing: 'easeOutQuart'
         });
 
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(event) {
-            const name = document.getElementById('name').value;
-            const password = document.getElementById('password').value;
-
-            if (!name || !password) {
-                event.preventDefault();
-                alert('Harap isi semua field yang diperlukan');
-            }
+        // Password Toggle
+        const toggleBtn = document.getElementById('togglePassword');
+        const passInput = document.getElementById('password');
+        
+        toggleBtn.addEventListener('click', () => {
+            const isPass = passInput.type === 'password';
+            passInput.type = isPass ? 'text' : 'password';
+            toggleBtn.innerHTML = `<i data-lucide="${isPass ? 'eye-off' : 'eye'}" class="h-5 w-5"></i>`;
+            lucide.createIcons();
         });
-
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('focused');
-            });
-        });
-    </script>
-
-</body>
-</html>
+    });
+</script>
+@endpush
