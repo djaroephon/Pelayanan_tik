@@ -13,24 +13,16 @@ jobs:
     steps:
       - name: Deploy via SSH
         run: |
-          # Setup SSH key
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-          # Connect dan deploy
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
+            echo "=== Masuk VPS ==="
             cd /var/www/Pelayanan_tik
+            echo "=== Git pull ==="
             git pull origin main
-            composer install --no-dev --optimize-autoloader --no-interaction
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            php artisan migrate --force
-            chown -R www-data:www-data storage bootstrap/cache
-            chmod -R 775 storage bootstrap/cache
-            sudo systemctl restart php-fpm
-            echo "✅ Deploy selesai!"
+            echo "=== Done ==="
           EOF
