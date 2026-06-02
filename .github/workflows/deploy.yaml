@@ -11,13 +11,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add VPS to known hosts
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-          echo "=== Test koneksi SSH ==="
-          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH berhasil!'" || echo "SSH GAGAL"
+      - name: Deploy via SSH
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+            cd /var/www/Pelayanan_tik
+
+            echo "=== Pull latest code ==="
+            git pull origin main
+
+            echo "=== Install Composer dependencies ==="
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+            echo "=== Install NPM dependencies & Build assets ==="
+            npm install
+            npm run build
+
+            echo "=== Clear & cache config ==="
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            echo "=== Run migrations ==="
+            php artisan migrate --force
+
+            echo "=== Fix permissions ==="
+            chown -R www-data:www-data /var/www/Pelayanan_tik/storage
+            chown -R www-data:www-data /var/www/Pelayanan_tik/bootstrap/cache
+            chmod -R 775 /var/www/Pelayanan_tik/storage
+            chmod -R 775 /var/www/Pelayanan_tik/bootstrap/cache
+
+            echo "=== Restart PHP-FPM ==="
+            sudo systemctl restart php-fpm
+
+            echo "✅ Deploy Pelayanan TIK selesai!"
           EOF
+
