@@ -18,11 +18,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            set -e
-            echo "=== Masuk VPS ==="
-            cd /var/www/Pelayanan_tik
-            echo "=== Git pull ==="
-            git pull origin main
-            echo "=== Done ==="
+          echo "=== Test koneksi SSH ==="
+          ssh -v -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo 'SSH berhasil!'" || echo "SSH GAGAL"
           EOF
